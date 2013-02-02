@@ -1,0 +1,105 @@
+<html>
+<body>
+Hello 
+</br>
+<a href='/logout'>Logout</a>
+</br>
+<a href='/advance'>Advance</a>
+<br>
+<a href='/reimb'>Reimbursement</a>
+</br>
+{% if userprofile.is_core %}
+<h3>Not Yet Submitted</h3>
+
+<form method='POST' action=''>
+{% csrf_token %}
+
+{{approved_core_formset.management_form}}
+
+{% for app in approved_not_submitted %}
+    {{app.project.name}}
+    <table border='1'>
+    <tr>
+    <th>Applied Date</th>
+    <th>Amount</th>
+    <th>Split Up</th>
+    <th>Approved Date</th>
+    <th>Received</th>
+    <th>Received Date</th>
+    <th>Due Date</th>
+    <th>Comments</th>
+    <th>Bills Submitted?</th>
+    </tr>
+    <tr>
+    {% for form in approved_core_formset %}
+
+        {% ifequal form.instance.id app.id %}
+        <td>{{app.applied_date}}</td>
+        <td>{{app.amount}}</td>
+        <td>{{app.split_up}}</td>
+        <td>{{app.approved_date}}</td>
+        {% for field in form %}
+        <td>{{field}}</td>
+        {% endfor %}
+        {% endifequal %}
+    
+    {% endfor %}
+<td><input type='submit' value='Save' /></td>
+    </tr>
+    
+    </table>
+{% endfor %}
+</form>
+
+
+<h3>Submitted</h3>
+<table border='1'>
+<tr>
+<th>Applied Date</th>
+<th>Amount</th>
+<th>split_up</th>
+<th>Approve Status</th>
+<th>Approved Date</th>
+<th>Recieved Status</th>
+<th>Received Date</th>
+<th>Due Date</th>
+<th>core comments</th>
+</tr>
+{% for advance in approved_submitted %}
+<tr>
+<td>{{advance.applied_date}}</td>
+<td>{{advance.amount}}</td>
+<td>{{advance.split_up}}</td>
+{% if advance.approved %}
+<td>Approved</td>
+<td>{{advance.approved_date}}</td>
+{% else %}
+{% if advance.disapproved %}
+<td>Disapproved</td>
+<td></td>
+{% else %}
+<td>Awaiting</td>
+<td></td>
+{% endif %}
+{% endif %}
+
+{% if advance.received %}
+<td>Received</td>
+<td>{{advance.receive_date}}</td>
+<td>{{advance.due_date}}</td>
+{% else %}
+<td>Not received</td>
+<td></td>
+<td></td>
+{% endif %}
+<td>{{advance.core_comment}}</td> 
+{% if advance.approved and advance.received %}
+<td><a href="{% url finance.views.advance_bill advance_id=advance.id %}">View bills</a></td>
+{% endif %}
+</tr> 
+{% endfor %}   
+</table>
+
+{% endif %}<!-- end of core-->
+</body>
+</html>

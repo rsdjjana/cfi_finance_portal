@@ -1,0 +1,205 @@
+<html>
+<body>
+Hello 
+</br>
+<a href='/logout'>Logout</a>
+<br>
+<a href='/advance'>Advance</a>
+</br>
+<a href='/reimb'>Reimbursement</a>
+<br>
+
+</br>
+{% if not userprofile.is_core %}
+<b>{{userprofile.project.name}}</b>
+<br>
+<form method='POST' action=''>
+{% csrf_token %}
+
+{{reimbform}}
+
+{{billformset.management_form}}
+
+<table border='1'>
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated</th>
+<th></th>
+<th>Delete</th>
+</tr>
+{% for bill in billformset %}
+    <tr>
+    {% for field in bill %}
+    <td>{{field}}</td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+
+</table>
+<input type='submit' value='Save' />
+</form>
+
+<table border='1'>
+<tr>
+<th>Applied Date</th>
+<th>Amount</th>
+
+<th>Status</th>
+<th>Received Date</th>
+</tr>
+{% for reimb in reimbset %}
+<tr>
+<td>{{reimb.applied_date}}</td>
+<td>{{reimb.amount}}</td>
+
+<td>{{reimb.received}}</td>
+<td>{{reimb.received_date}}</td>
+</tr>
+<tr><td>Bill Details</td></tr>
+<tr>
+
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated?</th>
+
+</tr>
+{% for bill in qset %}
+{% ifequal bill.reimb reimb %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+</tr>
+
+{% endifequal %}
+{% endfor%}
+<tr></tr>
+{% endfor %}
+</table>
+
+{% endif %}<!-- end of user -->
+
+{% if userprofile.is_core %}
+
+<h3>Not Yet Submitted</h3>
+<form method='POST' action=''>
+{% csrf_token %}
+
+{{reimbformsetnotsubmitted.management_form}}
+<table border='1'>
+<tr>
+<th>Applied Date</th>
+<th>Amount</th>
+
+<th>Received Status</th>
+<th>Received Date</th>
+<th>Submitted?</th>
+</tr>
+{% for reimb in reimb_not_submitted %}
+<tr>
+<td>{{reimb.applied_date}}</td>
+<td>{{reimb.amount}}</td>
+
+{% for form in reimbformsetnotsubmitted %}
+    {% ifequal form.instance.id reimb.id %}
+        {% for field in form %}
+            <td>{{field}}</td>
+        {% endfor %}
+    {% endifequal %}
+{% endfor %}
+<td><input type='submit' value='Update' /></td>
+</tr>
+<tr><td>Bill Details</td></tr>
+<tr>
+
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated?</th>
+
+</tr>
+{% for bill in qset %}
+{% ifequal bill.reimb reimb %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+</tr>
+
+{% endifequal %}
+{% endfor%}
+<tr></tr>
+{% endfor %}
+</table>
+</form>
+
+
+<h3>Submitted</h3>
+<form method='POST' action=''>
+{% csrf_token %}
+{{reimbformsetsubmitted.management_form}}
+
+<table border='1'>
+<tr>
+<th>Applied Date</th>
+<th>Amount</th>
+
+<th>Received Status</th>
+<th>Received Date</th>
+<th>Submitted?</th>
+</tr>
+{% for reimb in reimb_submitted %}
+<tr>
+<td>{{reimb.applied_date}}</td>
+<td>{{reimb.amount}}</td>
+
+{% for form in reimbformsetsubmitted %}
+    {% ifequal form.instance.id reimb.id %}
+        {% for field in form %}
+            <td>{{field}}</td>
+        {% endfor %}
+    {% endifequal %}
+{% endfor %}
+<td><input type='submit' value='Update' /></td>
+</tr>
+<tr><td>Bill Details</td></tr>
+<tr>
+
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated?</th>
+
+</tr>
+{% for bill in qset %}
+{% ifequal bill.reimb reimb %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+</tr>
+
+{% endifequal %}
+{% endfor%}
+<tr></tr>
+<tr></tr>
+{% endfor %}
+</table>
+</form>
+
+{% endif %}
+</body>
+</html>

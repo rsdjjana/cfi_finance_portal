@@ -1,0 +1,117 @@
+<html>
+<body>
+Hello 
+</br>
+<a href='/logout'>Logout</a>
+</br>
+<a href='/advance'>Advance</a>
+<br>
+<a href='/reimb'>Reimbursement</a>
+</br>
+{% if not userprofile.is_core %}
+<form method='POST' action=''>
+{% csrf_token %}
+<table border='1'>
+<tr>
+<th>Amount</th>
+<th>Split Up</th>
+</tr>
+<tr>
+{% for field in advanceform %}
+<td>{{field}}</td>
+{% endfor %}
+</tr>
+</table>
+<input type='submit' value='Save' />
+</form>
+
+<table border='1'>
+<tr>
+<th>Applied Date</th>
+<th>Amount</th>
+<th>split_up</th>
+<th>Approve Status</th>
+<th>Approved_date</th>
+<th>Recieved Status</th>
+<th>Received Date</th>
+<th>Due Date</th>
+<th>core comments</th>
+</tr>
+{% for advance_application in advance_applications %}
+<tr>
+<td>{{advance_application.applied_date}}</td>
+<td>{{advance_application.amount}}</td>
+<td>{{advance_application.split_up}}</td>
+{% if advance_application.approved %}
+<td>Approved</td>
+<td>{{advance_application.approved_date}}</td>
+{% else %}
+{% if advance_application.disapproved %}
+<td>Disapproved</td>
+<td></td>
+{% else %}
+<td>Awaiting</td>
+<td></td>
+{% endif %}
+{% endif %}
+
+{% if advance_application.received %}
+<td>Received</td>
+<td>{{advance_application.receive_date}}</td>
+<td>{{advance_application.due_date}}</td>
+{% else %}
+<td>Not received</td>
+<td></td>
+<td></td>
+{% endif %}
+<td>{{advance_application.core_comment}}</td> 
+{% if advance_application.approved and advance_application.received %}
+
+<td><a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">Add bills</a></td>
+
+{% endif %}
+</tr> 
+{% endfor %}   
+</table>
+
+{% endif %} <!-- end for the user -->
+
+{% if userprofile.is_core %}
+<a href='/advance/approved'>Advance_approved</a>
+</br>
+<form method='POST' action=''>
+{% csrf_token %}
+{{advance_core_formset.management_form}}
+
+{% for app in pending_advance_app %}
+    {{app.project.name}}
+    <table border='1'>
+    <tr>
+    <th>Applied Date</th>
+    <th>Amount</th>
+    <th>Split Up</th>
+    <th>Approve</th>
+    <th>Disapprove</th>
+    <th>Comments</th>
+    </tr>
+    <tr>
+    {% for form in advance_core_formset %}
+    {% ifequal form.instance.id app.id %}
+    <td>{{app.applied_date}}</td>
+    <td>{{app.amount}}</td>
+    <td>{{app.split_up}}</td>
+    {% for field in form %}
+    <td>{{field}}</td>
+    {% endfor %}
+    {% endifequal %}
+    
+    {% endfor %}
+<td><input type='submit' value='Save' /></td>
+    </tr>
+    
+    </table>
+{% endfor %}
+</form>
+{% endif %} <!-- end of the core -->
+</body>
+</html>
