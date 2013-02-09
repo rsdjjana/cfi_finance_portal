@@ -97,6 +97,7 @@ Hello
 
 {% for reimb in qsetreimb %}
 <tr>
+<th>Project</th>
 <th>Applied Date</th>
 <th>Amount</th>
 <th>Received Status</th>
@@ -104,6 +105,7 @@ Hello
 <th>Submitted?</th>
 </tr>
 <tr>
+<td>{{reimb.project.name}}</td>
 <td>{{reimb.applied_date}}</td>
 <td>{{reimb.amount}}</td>
 

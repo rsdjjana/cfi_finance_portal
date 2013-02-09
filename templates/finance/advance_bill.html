@@ -13,6 +13,7 @@ Hello
 </br>
 </br>
 {% if not userprofile.is_core %}
+<h3>{{advance_application.project.name}}</h3>
 <table border='1'>
 <tr>
 <th>Applied Date</th>
@@ -86,8 +87,10 @@ Hello
 
 {% if userprofile.is_core %}
 
+<h3>{{advance_application.project.name}}</h3>
 <table border='1'>
 <tr>
+
 <th>Applied Date</th>
 <th>Amount</th>
 <th>split_up</th>

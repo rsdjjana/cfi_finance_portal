@@ -58,6 +58,7 @@ Hello
 <h3>Submitted</h3>
 <table border='1'>
 <tr>
+<th>Project</th>
 <th>Applied Date</th>
 <th>Amount</th>
 <th>split_up</th>
@@ -70,6 +71,7 @@ Hello
 </tr>
 {% for advance in approved_submitted %}
 <tr>
+<td>{{advance.project.name}}</td>
 <td>{{advance.applied_date}}</td>
 <td>{{advance.amount}}</td>
 <td>{{advance.split_up}}</td>
