@@ -147,35 +147,29 @@ def advance_approved(request):
         return render_to_response('finance/advance_approved.html',locals(),context_instance=RequestContext(request))    
 
 
-
-'''
-I guess we have problem because there are two request.POST and it gets confused in the view
-
-'''
 def reimb(request):
     userprofile=UserProfile.objects.get(user=request.user)
     if userprofile.is_core:
-        ReimbFormsetSubmitted=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
-        ReimbFormsetNotSubmitted=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
-        qsetreimbsub=Reimb.objects.filter(submitted=True)
-        qsetreimbnotsub=Reimb.objects.filter(submitted=False)
+        ReimbFormset=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
+        #ReimbFormsetNotSubmitted=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
+        qsetreimb=Reimb.objects.all().order_by('submitted')
+        #qsetreimbnotsub=Reimb.objects.filter(submitted=False)
         if request.method=='POST':
-            reimbformsetsubmitted=ReimbFormsetSubmitted(request.POST,queryset=qsetreimbsub)
-            reimbformsetnotsubmitted=ReimbFormsetNotSubmitted(request.POST,queryset=qsetreimbnotsub)
-            for form in reimbformsetsubmitted.forms:
+            reimbformset=ReimbFormset(request.POST,queryset=qsetreimb)
+            #reimbformsetnotsubmitted=ReimbFormsetNotSubmitted(request.POST,queryset=qsetreimbnotsub)
+            for form in reimbformset.forms:
                 if form.has_changed():
                     form.save()
-                    
-            for form in reimbformsetnotsubmitted.forms:
-                if form.has_changed():
-                    form.save()
-                    
+            #for form in reimbformsetnotsubmitted.forms:
+                #if form.has_changed():
+                    #form.save()        
         else:
-            reimbformsetsubmitted=ReimbFormsetSubmitted(queryset=qsetreimbsub)
-            reimbformsetnotsubmitted=ReimbFormsetNotSubmitted(queryset=qsetreimbnotsub)
+            reimbformset=ReimbFormset(queryset=qsetreimb)
+            #reimbformsetnotsubmitted=ReimbFormsetNotSubmitted(queryset=qsetreimbnotsub)
         reimb_submitted=Reimb.objects.filter(submitted=True)
         reimb_not_submitted=Reimb.objects.filter(submitted=False)
         qset=BillDetail.objects.filter(is_advance=False)
+        qsetreimb=Reimb.objects.all().order_by('submitted')
         return render_to_response('finance/reimb_bill.html',locals(),context_instance=RequestContext(request))
     else:
         BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated'),extra=2, can_delete=True)
@@ -207,7 +201,7 @@ def reimb(request):
             
         else:
             reimbform=ReimbForm()
-        reimbset=Reimb.objects.filter(project=userprofile.project)
+        reimbset=Reimb.objects.filter(project=userprofile.project).order_by('received')
         qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=False)
         #BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated'),extra=2, can_    delete=True)
         qset1=BillDetail.objects.filter(id=0)

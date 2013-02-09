@@ -41,6 +41,9 @@ Hello
         {% for field in form %}
         <td>{{field}}</td>
         {% endfor %}
+        {% if app.approved and app.received %}
+<td><a href="{% url finance.views.advance_bill advance_id=app.id %}">View bills</a></td>
+{% endif %}
         {% endifequal %}
     
     {% endfor %}

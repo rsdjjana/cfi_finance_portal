@@ -47,7 +47,7 @@ Hello
 <th>Applied Date</th>
 <th>Amount</th>
 
-<th>Status</th>
+<th>Received Status</th>
 <th>Received Date</th>
 </tr>
 {% for reimb in reimbset %}
@@ -88,26 +88,26 @@ Hello
 
 {% if userprofile.is_core %}
 
-<h3>Not Yet Submitted</h3>
+
 <form method='POST' action=''>
 {% csrf_token %}
 
-{{reimbformsetnotsubmitted.management_form}}
+{{reimbformset.management_form}}
 <table border='1'>
+
+{% for reimb in qsetreimb %}
 <tr>
 <th>Applied Date</th>
 <th>Amount</th>
-
 <th>Received Status</th>
 <th>Received Date</th>
 <th>Submitted?</th>
 </tr>
-{% for reimb in reimb_not_submitted %}
 <tr>
 <td>{{reimb.applied_date}}</td>
 <td>{{reimb.amount}}</td>
 
-{% for form in reimbformsetnotsubmitted %}
+{% for form in reimbformset %}
     {% ifequal form.instance.id reimb.id %}
         {% for field in form %}
             <td>{{field}}</td>
@@ -143,7 +143,7 @@ Hello
 </table>
 </form>
 
-
+<!-- 
 <h3>Submitted</h3>
 <form method='POST' action=''>
 {% csrf_token %}
@@ -199,6 +199,7 @@ Hello
 {% endfor %}
 </table>
 </form>
+-->
 
 {% endif %}
 </body>
