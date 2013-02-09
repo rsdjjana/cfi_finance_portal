@@ -9,6 +9,10 @@ Hello
 <a href='/reimb'>Reimbursement</a>
 </br>
 {% if userprofile.is_core %}
+<a href='/bills'>Bills</a>
+<br>
+{% endif %}
+{% if userprofile.is_core %}
 <h3>Not Yet Submitted</h3>
 
 <form method='POST' action=''>

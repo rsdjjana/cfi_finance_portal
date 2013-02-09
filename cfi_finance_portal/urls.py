@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^advance/bill/(?P<advance_id>\d+)/$','finance.views.advance_bill',name='advance_bill'),
     url(r'^advance/approved/$','finance.views.advance_approved',name='advance_approved'),
     url(r'^reimb/$','finance.views.reimb',name='reimb'),
+    url(r'^bills/$','finance.views.bills',name='bills'),
     # url(r'^cfi_finance_portal/', include('cfi_finance_portal.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

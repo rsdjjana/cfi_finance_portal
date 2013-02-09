@@ -11,6 +11,10 @@ Hello
 </br>
 <a href='/reimb'>Reimbursement</a>
 </br>
+{% if userprofile.is_core %}
+<a href='/bills'>Bills</a>
+<br>
+{% endif %}
 </br>
 {% if not userprofile.is_core %}
 <h3>{{advance_application.project.name}}</h3>
@@ -155,8 +159,7 @@ Hello
 </tr>
 {% endfor %}
 
-<table>
-
+</table>
 
 {% endif %}
 </body>
