@@ -1,0 +1,113 @@
+<html>
+<body>
+Hello 
+</br>
+<a href='/logout'>Logout</a>
+
+<br>
+<a href='/advance'>Advance</a>
+
+</br>
+<a href='/reimb'>Reimbursement</a>
+<br>
+{% if userprofile.is_core %}
+<a href='/bills'>Bills</a>
+<br>
+{% endif %}
+
+{% if userprofile.is_core %}
+<h3>Advance</h3>
+<h4>Not yet submitted</h4>
+<table border='1'>
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Submitted?</th>
+</tr>
+{% for bill in advance_bills_not_sub %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.core_submitted}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<table border='1'>
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Submitted?</th>
+</tr>
+<h4>Submitted</h3>
+{% for bill in advance_bills_sub %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.core_submitted}}</td>
+</tr>
+{% endfor %}
+
+</table>
+<h3>Reimbursement</h3>
+<h4>Not yet submitted</h4>
+<table border='1'>
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Submitted?</th>
+</tr>
+{% for bill in reimb_bills_not_sub %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.core_submitted}}</td>
+</tr>
+{% endfor %}
+
+</table>
+<h4>Submitted</h4>
+<table border='1'>
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Submitted?</th>
+</tr>
+{% for bill in reimb_bills_sub %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.core_submitted}}</td>
+</tr>
+{% endfor %}
+
+</table>
+{% endif %}
+
+</body>
+</html>
