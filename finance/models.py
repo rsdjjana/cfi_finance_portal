@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 class Project(models.Model):
     name=models.CharField(max_length=40)
+    def __unicode__(self):
+        return self.name
     
     
 class UserProfile(models.Model):
@@ -15,6 +17,8 @@ class UserProfile(models.Model):
     room_number=models.CharField(max_length=7,blank=True)
     is_core=models.BooleanField(default=False)
     project=models.ForeignKey(Project,blank=True,null=True)
+    def __unicode__(self):
+        return self.name
     
     
 class Advance(models.Model):
