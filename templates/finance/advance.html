@@ -1,17 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
-Hello 
-</br>
-<a href='/logout'>Logout</a>
-</br>
-<a href='/advance'>Advance</a>
-<br>
-<a href='/reimb'>Reimbursement</a>
-</br>
-{% if userprofile.is_core %}
-<a href='/bills'>Bills</a>
-<br>
-{% endif %}
+
+<div class="tabbable">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#request" data-toggle="tab">Request</a></li>
+<li><a href="#history" data-toggle="tab">History</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="request">
 {% if not userprofile.is_core %}
 <form method='POST' action=''>
 {% csrf_token %}
@@ -28,7 +24,8 @@ Hello
 </table>
 <input type='submit' value='Save' />
 </form>
-
+</div>
+<div id="history" class="tab-pane">
 <table border='1'>
 <tr>
 <th>Applied Date</th>
@@ -79,7 +76,8 @@ Hello
 </table>
 
 {% endif %} <!-- end for the user -->
-
+</div><!-- end of history -->
+</div>
 {% if userprofile.is_core %}
 <a href='/advance/approved'>Advance_approved</a>
 </br>
@@ -117,4 +115,5 @@ Hello
 {% endfor %}
 </form>
 {% endif %} <!-- end of the core -->
+</div>
 {% endblock %}

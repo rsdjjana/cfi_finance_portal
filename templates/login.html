@@ -1,5 +1,9 @@
-<html>
-<body>
+{% extends "base.html" %}
+{% block top_bar %}
+{% endblock %}
+{% block left_bar %}
+{% endblock %}
+{% block body %}
 <form action='' method='POST' >
 {% csrf_token %}
 <table>
@@ -7,5 +11,4 @@
 </table>
 <input type="submit" value="login" />
 </form>
-</body>
-</html>
+{% endblock %}

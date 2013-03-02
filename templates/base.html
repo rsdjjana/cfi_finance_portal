@@ -1,10 +1,39 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<title>CFI Finance Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{{ MEDIA_URL }}css/bootstrap.css" rel="stylesheet">
+<link href="{{ MEDIA_URL }}css/bootstrap-responsive.css" rel="stylesheet">
+<link href="{{ MEDIA_URL }}css/chosen.css" rel="stylesheet">
 </head>
 <body>
-hey hiiiiiiiiiii
-<br>
-{% block body %}
+{% block top_bar %}
+{% include "top_bar.html" %}
+{% endblock %}
+<div class="container-fluid">
+<div class="row-fluid">
+    <div class="span2 ">
+    {% block left_bar %}
+    {% include "left_bar.html"%}
+    {% endblock %}
+    </div>
+    <div class="span10">
+        {% block body %}
+    
+        {% endblock %}
+    </div>
+</div>
+</div>
+
+{% block javascript %}
+        <script src="{{ MEDIA_URL }}js/jquery.js"></script>
+        <script src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
+        <script src="{{ MEDIA_URL }}js/bootstrap-modal.js"></script>
+        <script src="{{ MEDIA_URL }}js/bootstrap-dropdown.js"></script>
+        <script src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
+        <script src="{{ MEDIA_URL }}js/jquery.dajax.core.js"></script>
+        <script src="{{ MEDIA_URL }}js/chosen.jquery.js"></script>
 {% endblock %}
 </body>
 </html>

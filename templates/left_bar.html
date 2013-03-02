@@ -1,0 +1,9 @@
+
+<ul class="nav nav-pills nav-stacked">
+<li><a href='/advance'>Advance</a></li>
+<li><a href='/reimb'>Reimbursement</a></li>
+{% if userprofile.is_core %}
+<li><a href='/bills'>Bills</a></li>
+{% endif %}
+
+</ul>

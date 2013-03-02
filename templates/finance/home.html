@@ -1,23 +1,4 @@
 {% extends "base.html" %}
 {% block body %}
-</br>
-<a href='/logout'>Logout</a>
-
-<br>
-<a href='/advance'>Advance</a>
-
-</br>
-<a href='/reimb'>Reimbursement</a>
-<br>
-{% if userprofile.is_core %}
-<a href='/bills'>Bills</a>
-<br>
-{% endif %}
-<form method='POST' action=''>
-{% csrf_token %}
-<table>
-
-<table>
-
-</form>
+<h1>Welcome!</h1>
 {% endblock %}
