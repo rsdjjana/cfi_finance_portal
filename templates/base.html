@@ -6,19 +6,30 @@
 <link href="{{ MEDIA_URL }}css/bootstrap.css" rel="stylesheet">
 <link href="{{ MEDIA_URL }}css/bootstrap-responsive.css" rel="stylesheet">
 <link href="{{ MEDIA_URL }}css/chosen.css" rel="stylesheet">
+<style type="text/css">
+body{
+font-size:15px;
+margin-right:4%;
+margin-left:4%;
+}
+</style>
 </head>
 <body>
-{% block top_bar %}
-{% include "top_bar.html" %}
-{% endblock %}
+
 <div class="container-fluid">
+<br>
 <div class="row-fluid">
-    <div class="span2 ">
+    <!--<div class="span2 ">
     {% block left_bar %}
     {% include "left_bar.html"%}
     {% endblock %}
-    </div>
-    <div class="span10">
+    </div>-->
+<!--    <div class="span1">
+    </div>-->
+    <div class="span12">
+    {% block top_bar %}
+    {% include "top_bar.html" %}
+    {% endblock %}
         {% block body %}
     
         {% endblock %}

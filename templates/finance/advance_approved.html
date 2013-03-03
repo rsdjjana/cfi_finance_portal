@@ -1,20 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
-Hello 
-</br>
-<a href='/logout'>Logout</a>
-</br>
-<a href='/advance'>Advance</a>
-<br>
-<a href='/reimb'>Reimbursement</a>
-</br>
 {% if userprofile.is_core %}
-<a href='/bills'>Bills</a>
 <br>
-{% endif %}
-{% if userprofile.is_core %}
-<h3>Not Yet Submitted</h3>
-
+<div class="tabbable tabs-left">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#not_yet_submitted" data-toggle="tab">Not Yet Submitted</a></li>
+<li><a href="#submitted" data-toggle="tab">Submitted</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="not_yet_submitted">
 <form method='POST' action=''>
 {% csrf_token %}
 
@@ -58,8 +52,8 @@ Hello
 {% endfor %}
 </form>
 
-
-<h3>Submitted</h3>
+</div><!-- notyetsub -->
+<div class="tab-pane" id="submitted">
 <table border='1'>
 <tr>
 <th>Project</th>
@@ -109,5 +103,9 @@ Hello
 {% endfor %}   
 </table>
 
+
+</div><!-- submitted -->
+</div><!-- content-->
+</div><!-- tabbable-->
 {% endif %}<!-- end of core-->
 {% endblock %}

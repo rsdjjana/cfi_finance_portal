@@ -33,7 +33,8 @@ class Advance(models.Model):
     due_date=models.DateTimeField(blank=True,null=True)
     project=models.ForeignKey(Project)
     core_comment=models.TextField(blank=True,null=True)
-    bill_submitted=models.BooleanField(blank=True,default=False) 
+    bill_submitted=models.BooleanField(blank=True,default=False)
+    read=models.BooleanField(blank=True,default=False) 
     
 class Reimb(models.Model):
     applied_date=models.DateTimeField(blank=True,null=True)

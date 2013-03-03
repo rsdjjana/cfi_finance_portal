@@ -1,10 +1,59 @@
-<div class="navbar navbar-static-top">
+
+<div class="navbar">
 <div class="navbar-inner ">
-<a class="brand">CFI</a>
+<a class="brand"><strong>CFI</strong></a>
+
 <ul class="nav">
+<li class="divider-vertical"></li>
+{% if home123 %}
+<li class="active"><a href='/home'>Home</a></li>
+{% else %}
 <li><a href='/home'>Home</a></li>
-<li><a>Profile</a></li>
-<li><a href="/logout">Logout</a></li>
+{% endif %}
+<li class="divider-vertical"></li>
+
+
+{% if userprofile.is_core %}
+{% if advancereq123 %}
+<li class="active"><a href='/advance'>Advance Requests</a></li>
+{% else %}
+<li><a href='/advance'>Advance Requests</a></li>
+{% endif %}
+<li class="divider-vertical"></li>
+{% if advanceapp123 %}
+<li class="active"><a href='/advance/approved'>Approved Advances</a></li>
+{% else %}
+<li><a href='/advance/approved'>Approved Advances</a></li>
+{% endif %}
+<li class="divider-vertical"></li>
+{% else %}
+{% if advance123 %}
+<li class="active"><a href='/advance'>Advance</a></li>
+{% else %}
+<li><a href='/advance'>Advance</a></li>
+{% endif %}
+<li class="divider-vertical"></li>
+{% endif %}
+
+{% if reimb123 %}
+<li class="active"><a href='/reimb'>Reimbursement</a></li>
+{% else %}
+<li><a href='/reimb'>Reimbursement</a></li>
+{% endif %}
+<li class="divider-vertical"></li>
+
+{% if userprofile.is_core %}
+{% if bills123 %}
+<li class="active"><a href='/bills'>Bills</a></li>
+{% else %}
+<li><a href='/bills'>Bills</a></li>
+{% endif %}
+
+{% endif %}
+</ul>
+<ul class="nav pull-right">
+<li class="divider-vertical"></li>
+<li ><a href="/logout">Logout</a></li>
 </ul>
 </div>
 </div>

@@ -1,22 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
-Hello 
-</br>
-<a href='/logout'>Logout</a>
-<br>
-<a href='/advance'>Advance</a>
-</br>
-
-
-</br>
-<a href='/reimb'>Reimbursement</a>
-</br>
-{% if userprofile.is_core %}
-<a href='/bills'>Bills</a>
-<br>
-{% endif %}
-</br>
 {% if not userprofile.is_core %}
+<div class="pull-right">
+<a href="/advance/"><button class="btn">Back</button></a>
+</div>
+
 <h3>{{advance_application.project.name}}</h3>
 <table border='1'>
 <tr>
@@ -90,6 +78,9 @@ Hello
 {% endif %}<!-- end of user -->
 
 {% if userprofile.is_core %}
+<div class="pull-right">
+<a href="/advance/approved"><button class="btn">Back</button></a>
+</div>
 
 <h3>{{advance_application.project.name}}</h3>
 <table border='1'>

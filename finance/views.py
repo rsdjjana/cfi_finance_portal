@@ -37,6 +37,8 @@ def logout(request):
     
 def home(request):
     if request.user.is_authenticated():
+        home123=True
+        userprofile=UserProfile.objects.get(user=request.user)
         return render_to_response('finance/home.html',locals(),context_instance=RequestContext(request))
     else:
         return HttpResponse("oops wrong page!")
@@ -46,7 +48,16 @@ def advance(request):
     if request.user.is_authenticated():
         userprofile=UserProfile.objects.get(user=request.user)
         if not userprofile.is_core:
+            advance123=True #for making the top nav bar active
             advance_applications=Advance.objects.filter(project=userprofile.project)
+            number_await_approval=len(Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=False))
+            number_approved_not_rec=len(Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=False))
+            number_rec_add_bills=len(Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=True).filter(bill_submitted=False))
+            number_disapproved_unread=len(Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False))
+            advance_applications_awaiting_approval=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=False)
+            approved_not_rec=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=False)
+            rec_add_bills=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=True).filter(bill_submitted=False)
+            disapproved_unread=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False)
             if request.method=='POST':
                 advanceform=AdvanceForm(request.POST)
                 if advanceform.is_valid():
@@ -56,12 +67,20 @@ def advance(request):
                     advanceform1.save()
                 else:
                     advanceform_error=True
+                    
+                if "read" in request.POST:  
+                    print "hello there"
+                    read1=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False)
+                    for read2 in read1:
+                        read2.read=True
+                        read2.save()
                 return HttpResponseRedirect('/advance')
                 
             else:
                 advanceform=AdvanceForm()  
             
         else:
+            advancereq123=True #for making the top nav bar active
             pending_advance_app=Advance.objects.filter(approved=False).filter(disapproved=False)
             AdvanceCoreFormset=modelformset_factory(Advance,fields=('approved','disapproved','core_comment'))
             if request.method=='POST':
@@ -111,7 +130,18 @@ def advance_bill(request,advance_id):
             return render_to_response('finance/advance_bill.html',locals(),context_instance=RequestContext(request))
     else:
         raise Http404            
-        
+
+
+def advance_bill_view(request,advance_id):
+    if request.user.is_authenticated():
+        advance123=True
+        userprofile=UserProfile.objects.get(user=request.user)
+        advance_application=Advance.objects.get(id=advance_id)
+        qset=BillDetail.objects.filter(is_advance=True).filter(advance=advance_application)
+        return render_to_response('finance/advance_bill_view.html',locals(),context_instance=RequestContext(request))
+            
+            
+            
 '''
 def reimb(request):
     userprofile=UserProfile.objects.get(user=request.user)
@@ -136,8 +166,10 @@ def reimb(request):
     
 def advance_approved(request):
     if request.user.is_authenticated():
+        advance
         userprofile=UserProfile.objects.get(user=request.user)
         if userprofile.is_core:
+            advanceapp123=True #for making the top nav bar active
             approved_submitted=Advance.objects.filter(approved=True).filter(bill_submitted=True)   
             approved_not_submitted=Advance.objects.filter(approved=True).filter(bill_submitted=False)
             ApprovedCoreFormset=modelformset_factory(Advance,fields=('received','receive_date','due_date','core_comment','bill_submitted'))
@@ -159,6 +191,7 @@ def reimb(request):
     if request.user.is_authenticated():
         userprofile=UserProfile.objects.get(user=request.user)
         if userprofile.is_core:
+            reimb123=True
             ReimbFormset=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
             #ReimbFormsetNotSubmitted=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
             qsetreimb=Reimb.objects.all().order_by('submitted')
@@ -182,6 +215,7 @@ def reimb(request):
             return render_to_response('finance/reimb_bill.html',locals(),context_instance=RequestContext(request))
             
         else:
+            reimb123=True
             BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated'),extra=2, can_delete=True)
             reimb_applications=Reimb.objects.filter(project=userprofile.project)
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=False)
@@ -225,6 +259,7 @@ def bills(request):
     if request.user.is_authenticated():
         userprofile=UserProfile.objects.get(user=request.user)
         if userprofile.is_core:
+            bills123=True
             advance_bills_not_sub=BillDetail.objects.filter(core_submitted=False).filter(is_advance=True)
             reimb_bills_not_sub=BillDetail.objects.filter(core_submitted=False).filter(is_advance=False)
             advance_bills_sub=BillDetail.objects.filter(core_submitted=True).filter(is_advance=True)
