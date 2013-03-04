@@ -1,19 +1,16 @@
 {% extends "base.html" %}
-{% block body %}
-Hello 
-</br>
-<a href='/logout'>Logout</a>
-<br>
-<a href='/advance'>Advance</a>
-</br>
-<a href='/reimb'>Reimbursement</a>
-<br>
-{% if userprofile.is_core %}
-<a href='/bills'>Bills</a>
-<br>
-{% endif %}
+{% block body %} 
 </br>
 {% if not userprofile.is_core %}
+<div class="tabbable tabs-left">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#request" data-toggle="tab">Request</a></li>
+<li><a href="#not_yet_received" data-toggle="tab">Not Yet Received</a></li>
+<li><a href="#received" data-toggle="tab">Received</a></li>
+
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="request">
 <b>{{userprofile.project.name}}</b>
 <br>
 <form method='POST' action=''>
@@ -34,17 +31,41 @@ Hello
 <th>Delete</th>
 </tr>
 {% for bill in billformset %}
+{% if not forloop.counter > 5 %}
     <tr>
     {% for field in bill %}
     <td>{{field}}</td>
     {% endfor %}
     </tr>
+{% endif %}
+    
 {% endfor %}
 
 </table>
-<input type='submit' value='Save' />
-</form>
+</br>
 
+<button type="button" class="btn" data-toggle="collapse" data-target="#extra">Add more bills</button>
+<div id="extra" class="collapse out">
+<table border='1'>
+{% for bill in billformset %}
+{% if forloop.counter > 5 %}
+    <tr>
+    {% for field in bill %}
+    <td>{{field}}</td>
+    {% endfor %}
+    </tr>
+{% endif %}
+    
+{% endfor %}
+</table>
+<tr></tr>
+</table>
+</div>
+<input type='submit' value="Send Request" />
+</form>
+</div><!-- request-->
+
+<div class="tab-pane" id="not_yet_received">
 <table border='1'>
 <tr>
 <th>Applied Date</th>
@@ -53,7 +74,7 @@ Hello
 <th>Received Status</th>
 <th>Received Date</th>
 </tr>
-{% for reimb in reimbset %}
+{% for reimb in reimbset_not_received %}
 <tr>
 <td>{{reimb.applied_date}}</td>
 <td>{{reimb.amount}}</td>
@@ -87,18 +108,72 @@ Hello
 {% endfor %}
 </table>
 
+</div><!-- not yet received-->
+<div class="tab-pane" id="received">
+<table border='1'>
+<tr>
+<th>Applied Date</th>
+<th>Amount</th>
+
+<th>Received Status</th>
+<th>Received Date</th>
+</tr>
+{% for reimb in reimbset_received %}
+<tr>
+<td>{{reimb.applied_date}}</td>
+<td>{{reimb.amount}}</td>
+
+<td>{{reimb.received}}</td>
+<td>{{reimb.received_date}}</td>
+</tr>
+<tr><td>Bill Details</td></tr>
+<tr>
+
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated?</th>
+
+</tr>
+{% for bill in qset %}
+{% ifequal bill.reimb reimb %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+</tr>
+
+{% endifequal %}
+{% endfor%}
+<tr></tr>
+{% endfor %}
+</table>
+
+</div><!-- received-->
+
+</div><!-- content -->
+</div><!-- tabbable-->
 {% endif %}<!-- end of user -->
 
 {% if userprofile.is_core %}
-
-
+<div class="tabbable tabs-left">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#not_yet_submitted" data-toggle="tab">Not Yet Submitted</a></li>
+<li><a href="#submitted_not_received" data-toggle="tab">Submitted, Not Received</a></li>
+<li><a href="#submitted_received" data-toggle="tab">Submitted, Received</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="not_yet_submitted">
 <form method='POST' action=''>
 {% csrf_token %}
 
-{{reimbformset.management_form}}
+{{reimbformset1.management_form}}
 <table border='1'>
 
-{% for reimb in qsetreimb %}
+{% for reimb in qsetreimb_not_yet_submitted %}
 <tr>
 <th>Project</th>
 <th>Applied Date</th>
@@ -112,14 +187,72 @@ Hello
 <td>{{reimb.applied_date}}</td>
 <td>{{reimb.amount}}</td>
 
-{% for form in reimbformset %}
+{% for form in reimbformset1 %}
     {% ifequal form.instance.id reimb.id %}
         {% for field in form %}
             <td>{{field}}</td>
         {% endfor %}
     {% endifequal %}
 {% endfor %}
-<td><input type='submit' value='Update' /></td>
+<td><input type='submit' value='Update' name="one" /></td>
+</tr>
+<tr><td>Bill Details</td></tr>
+<tr>
+
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated?</th>
+
+</tr>
+{% for bill in qset %}
+{% ifequal bill.reimb reimb %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+</tr>
+
+{% endifequal %}
+{% endfor%}
+<tr></tr>
+{% endfor %}
+</table>
+</form>
+</div><!-- not_yet_submitted-->
+
+<div class="tab-pane" id="submitted_not_received">
+<form method='POST' action=''>
+{% csrf_token %}
+
+{{reimbformset2.management_form}}
+<table border='1'>
+
+{% for reimb in qsetreimb_submitted_not_received %}
+<tr>
+<th>Project</th>
+<th>Applied Date</th>
+<th>Amount</th>
+<th>Received Status</th>
+<th>Received Date</th>
+<th>Submitted?</th>
+</tr>
+<tr>
+<td>{{reimb.project.name}}</td>
+<td>{{reimb.applied_date}}</td>
+<td>{{reimb.amount}}</td>
+
+{% for form in reimbformset2 %}
+    {% ifequal form.instance.id reimb.id %}
+        {% for field in form %}
+            <td>{{field}}</td>
+        {% endfor %}
+    {% endifequal %}
+{% endfor %}
+<td><input type='submit' value='Update' name="two" /></td>
 </tr>
 <tr><td>Bill Details</td></tr>
 <tr>
@@ -148,6 +281,65 @@ Hello
 </table>
 </form>
 
+</div>
+<div class="tab-pane" id="submitted_received">
+<form method='POST' action=''>
+{% csrf_token %}
+
+{{reimbformset3.management_form}}
+<table border='1'>
+
+{% for reimb in qsetreimb_submitted_received %}
+<tr>
+<th>Project</th>
+<th>Applied Date</th>
+<th>Amount</th>
+<th>Received Status</th>
+<th>Received Date</th>
+<th>Submitted?</th>
+</tr>
+<tr>
+<td>{{reimb.project.name}}</td>
+<td>{{reimb.applied_date}}</td>
+<td>{{reimb.amount}}</td>
+
+{% for form in reimbformset3 %}
+    {% ifequal form.instance.id reimb.id %}
+        {% for field in form %}
+            <td>{{field}}</td>
+        {% endfor %}
+    {% endifequal %}
+{% endfor %}
+<td><input type='submit' value='Update' name="three" /></td>
+</tr>
+<tr><td>Bill Details</td></tr>
+<tr>
+
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated?</th>
+
+</tr>
+{% for bill in qset %}
+{% ifequal bill.reimb reimb %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+</tr>
+
+{% endifequal %}
+{% endfor%}
+<tr></tr>
+{% endfor %}
+</table>
+</form>
+
+</div>
 <!-- 
 <h3>Submitted</h3>
 <form method='POST' action=''>
@@ -205,6 +397,7 @@ Hello
 </table>
 </form>
 -->
-
+</div><!-- content -->
+</div><!-- tabbable -->
 {% endif %}
 {% endblock %}
