@@ -4,6 +4,7 @@ from finance.forms import *
 from django.contrib import auth
 from django.forms.models import modelformset_factory
 from datetime import date
+import xlwt
 
 def login(request):
     if request.method=='POST':
@@ -291,6 +292,41 @@ def bills(request):
         userprofile=UserProfile.objects.get(user=request.user)
         if userprofile.is_core:
             bills123=True
+            ExcelFormset=modelformset_factory(BillDetail,fields=('core_submitted','excel',))
+            qset=BillDetail.objects.all()
+            excelformset=ExcelFormset(queryset=qset)
+            if request.method=='POST':
+                excelformset=ExcelFormset(request.POST,queryset=qset)
+                for form in excelformset.forms:
+                    if form.has_changed():
+                        form.save()
+                if 'excel' in request.POST:
+                    excel_create=BillDetail.objects.filter(excel=True)
+                    workbook=xlwt.Workbook()
+                    worksheet=workbook.add_sheet('excelsheet',cell_overwrite_ok=True)
+                    worksheet.write(0,0,"Shop Name")
+                    worksheet.write(0,1,"Bill Number")
+                    worksheet.write(0,2,"Purchase Detail")
+                    worksheet.write(0,3,"Amount")
+                    i=1
+                    j=0
+                    for bill in excel_create:
+                        worksheet.write(i,j,bill.shop_name)
+                        j+=1
+                        worksheet.write(i,j,bill.bill_number)
+                        j+=1
+                        worksheet.write(i,j,bill.purchase_detail)
+                        j+=1
+                        worksheet.write(i,j,bill.amount)
+                        i+=1
+                        j=0
+                    return xls_to_response(workbook,'CFI_Bills.xls')
+                qset1=BillDetail.objects.all()
+                for bill in qset1:
+                    bill.excel=False
+                    bill.save()
+            else:
+                excelformset=ExcelFormset(queryset=qset)
             advance_bills_not_sub=BillDetail.objects.filter(core_submitted=False).filter(is_advance=True)
             reimb_bills_not_sub=BillDetail.objects.filter(core_submitted=False).filter(is_advance=False)
             advance_bills_sub=BillDetail.objects.filter(core_submitted=True).filter(is_advance=True)
@@ -301,3 +337,10 @@ def bills(request):
             raise Http404()
     else:
         raise Http404
+        
+        
+def xls_to_response(workbook,fname):
+    response=HttpResponse(mimetype="application/ms-excel")
+    response['Content-Disposition']='attachment; filename=%s' %fname
+    workbook.save(response)
+    return response

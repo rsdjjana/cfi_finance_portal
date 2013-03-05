@@ -1,22 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
-Hello 
-</br>
-<a href='/logout'>Logout</a>
-
-<br>
-<a href='/advance'>Advance</a>
-
-</br>
-<a href='/reimb'>Reimbursement</a>
-<br>
 {% if userprofile.is_core %}
-<a href='/bills'>Bills</a>
-<br>
-{% endif %}
-
-{% if userprofile.is_core %}
-<h3>Advance</h3>
+<div class="tabbable tabs-left">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#advance" data-toggle="tab">Advance</a></li>
+<li><a href="#reimb" data-toggle="tab">Reimbursement</a></li>
+<li><a href="#excel" data-toggle="tab">Create Excel</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="advance">
 <h4>Not yet submitted</h4>
 <table border='1'>
 <tr>
@@ -37,9 +29,9 @@ Hello
 <td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}
-
 </table>
 
+<h4>Submitted</h3>
 <table border='1'>
 <tr>
 <th>Shop Name</th>
@@ -49,7 +41,7 @@ Hello
 <th>Dated</th>
 <th>Submitted?</th>
 </tr>
-<h4>Submitted</h3>
+
 {% for bill in advance_bills_sub %}
 <tr>
 <td>{{bill.shop_name}}</td>
@@ -60,9 +52,12 @@ Hello
 <td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}
-
 </table>
-<h3>Reimbursement</h3>
+</div><!-- advance-->
+
+
+<div class="tab-pane" id="reimb">
+
 <h4>Not yet submitted</h4>
 <table border='1'>
 <tr>
@@ -107,6 +102,68 @@ Hello
 {% endfor %}
 
 </table>
+</div><!-- reimb -->
+<div class="tab-pane" id="excel">
+
+<form method="post" action=''>
+{% csrf_token %}
+{{excelformset.management_form}}
+<table border='1'>
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Submitted?</th>
+<th>Add to Excel</th>
+</tr>
+<tr><td>Not Yet Submitted</td></tr>
+{% for bill in qset %}
+{% if not bill.core_submitted %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+{% for form in excelformset %}
+{% ifequal form.instance.id bill.id %}
+{% for field in form %}
+<td>{{field}}</td>
+{% endfor %}
+{% endifequal %}
+{% endfor %}<!-- form in ex...-->
+</tr>
+{% endif %}
+{% endfor %}
+
+<tr><td>Submitted</td></tr>
+{% for bill in qset %}
+{% if bill.core_submitted %}
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.purchase_detail}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+{% for form in excelformset %}
+{% ifequal form.instance.id bill.id %}
+{% for field in form %}
+<td>{{field}}</td>
+{% endfor %}
+{% endifequal %}
+{% endfor %}<!-- form in ex...-->
+</tr>
+{% endif %}
+{% endfor %}
+</table>
+<input type="submit" value="Save" >
+<input type="submit" value="Create Excel Sheet" name="excel">
+</form>
+</div>
+</div><!-- content -->
+</div><!-- tabbable -->
 {% endif %}
 
 {% endblock %}

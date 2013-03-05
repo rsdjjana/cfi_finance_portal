@@ -55,6 +55,7 @@ class BillDetail(models.Model):
     core_submitted=models.BooleanField(default=False)
     advance=models.ForeignKey(Advance,blank=True,null=True)
     reimb=models.ForeignKey(Reimb,blank=True,null=True)
+    excel=models.BooleanField(blank=True,default=False)
     
 
 
