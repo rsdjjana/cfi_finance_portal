@@ -3,45 +3,42 @@
 {% if not userprofile.is_core %}
 <br>
 <div class="tabbable tabs-left">
-<ul class="nav nav-tabs">
-<li class="active"><a href="#request" data-toggle="tab">Request</a></li>
-<li><a href="#awaiting_approval" data-toggle="tab">Awaiting Approval (<b>{{number_await_approval}}</b>)</a></li>
-<li><a href="#approved_not_received" data-toggle="tab">Approved, Not Received(<b>{{number_approved_not_rec}}</b>)</a></li>
-<li><a href="#received_add_bills" data-toggle="tab">Received, Add Bills(<b>{{number_rec_add_bills}}</b>)</a></li>
-<li><a href="#disapproved" data-toggle="tab">Disapproved(<b>{{number_disapproved_unread}}</b>)</a></li>
-<li><a href="#history" data-toggle="tab">History</a></li>
-</ul>
+	<ul class="nav nav-tabs">
+	<li class="active"><a href="#request" data-toggle="tab">Request</a></li>
+		<li><a href="#awaiting_approval" data-toggle="tab">Awaiting Approval (<b>{{number_await_approval}}</b>)</a></li>
+		<li><a href="#approved_not_received" data-toggle="tab">Approved, Not Received(<b>{{number_approved_not_rec}}</b>)</a></li>	
+		<li><a href="#received_add_bills" data-toggle="tab">Received, Add Bills(<b>{{number_rec_add_bills}}</b>)</a></li>
+		<li><a href="#disapproved" data-toggle="tab">Disapproved(<b>{{number_disapproved_unread}}</b>)</a></li>
+		<li><a href="#history" data-toggle="tab">History</a></li>
+	</ul>
 <div class="tab-content">
 <div class="tab-pane active" id="request">
 
+
 <form method='POST' action=''>
-{% csrf_token %}
-<table border='1'>
-<tr>
-<th>Amount</th>
-<th>Split Up</th>
-</tr>
-<tr>
-{% for field in advanceform %}
-<td>{{field}}</td>
-{% endfor %}
-</tr>
-</table>
-<input type='submit' value="Send Request" />
+{% csrf_token %}  
+<fieldset>
+	<center>    
+	<legend>Request an Advance</legend>
+	{% for field in advanceform %}
+	<label><strong>{{field.label}}</strong></label>
+    {{field}}
+	{% endfor %}<br>
+	<input type='submit' value="Send Request" class='btn btn-danger' />
+	</center> 
+</fieldset>
 </form>
+
 </div>
+
 <div class="tab-pane" id="awaiting_approval">
-<table border='1'>
+{% if advance_applications_awaiting_approval %}
+<table class='table table-bordered'>
 <tr>
 <th>Applied Date</th>
 <th>Amount</th>
-<th>split_up</th>
-<th>Approve Status</th>
-<th>Approved_date</th>
-<th>Recieved Status</th>
-<th>Received Date</th>
-<th>Due Date</th>
-<th>core comments</th>
+<th>Split Up</th>
+<th>Status</th>
 </tr>
 {% for advance_application in advance_applications_awaiting_approval %}
 <tr>
@@ -50,52 +47,32 @@
 <td>{{advance_application.split_up}}</td>
 {% if advance_application.approved %}
 <td>Approved</td>
-<td>{{advance_application.approved_date}}</td>
 {% else %}
 {% if advance_application.disapproved %}
 <td>Disapproved</td>
-<td></td>
 {% else %}
 <td>Awaiting</td>
-<td></td>
 {% endif %}
-{% endif %}
-
-{% if advance_application.received %}
-<td>Received</td>
-<td>{{advance_application.receive_date}}</td>
-<td>{{advance_application.due_date}}</td>
-{% else %}
-<td>Not received</td>
-<td></td>
-<td></td>
-{% endif %}
-<td>{{advance_application.core_comment}}</td> 
-<td>{{advance_application.bill_submitted}}</td>
-{% if advance_application.approved and advance_application.received %}
-
-<td><a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">Add bills</a></td>
-
 {% endif %}
 </tr> 
 {% endfor %}   
 </table>
-
+{% else %}
+<h3> <center>You have no pending approvals. </center> </h3>
+{% endif %}
 </div><!-- awaitapproval -->
 
-<div class="tab-pane" id="approved_not_received">
 
-<table border='1'>
+<div class="tab-pane" id="approved_not_received">
+{% if approved_not_rec %}
+<table class='table table-bordered'>
 <tr>
 <th>Applied Date</th>
 <th>Amount</th>
-<th>split_up</th>
+<th>Split Up</th>
 <th>Approve Status</th>
-<th>Approved_date</th>
-<th>Recieved Status</th>
-<th>Received Date</th>
-<th>Due Date</th>
-<th>core comments</th>
+<th>Approved date</th>
+<th>Core comments</th>
 </tr>
 {% for advance_application in approved_not_rec %}
 <tr>
@@ -108,34 +85,18 @@
 {% else %}
 {% if advance_application.disapproved %}
 <td>Disapproved</td>
-<td></td>
+<td>NA</td>
 {% else %}
 <td>Awaiting</td>
-<td></td>
+<td>NA</td>
 {% endif %}
-{% endif %}
-
-{% if advance_application.received %}
-<td>Received</td>
-<td>{{advance_application.receive_date}}</td>
-<td>{{advance_application.due_date}}</td>
-{% else %}
-<td>Not received</td>
-<td></td>
-<td></td>
-{% endif %}
-<td>{{advance_application.core_comment}}</td> 
-<td>{{advance_application.bill_submitted}}</td>
-{% if advance_application.approved and advance_application.received %}
-
-<td><a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">Add bills</a></td>
-
 {% endif %}
 </tr> 
 {% endfor %}   
 </table>
-
-
+{% else %}
+<center><h3>You don't have any advances approved, or you have received amounts for all approved advances.</h3></center>
+{% endif %}
 </div><!-- approved_not_rec -->
 
 <div class="tab-pane" id="received_add_bills" >
