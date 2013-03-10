@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block body %} 
+{% block body %}
 </br>
 {% if not userprofile.is_core %}
 <div class="tabbable tabs-left">
@@ -20,7 +20,7 @@
 
 {{billformset.management_form}}
 
-<table border='1'>
+<table class='table table-bordered'>
 <tr>
 <th>Shop Name</th>
 <th>Bill Number</th>
@@ -38,7 +38,7 @@
     {% endfor %}
     </tr>
 {% endif %}
-    
+
 {% endfor %}
 
 </table>
@@ -46,7 +46,7 @@
 
 <button type="button" class="btn" data-toggle="collapse" data-target="#extra">Add more bills</button>
 <div id="extra" class="collapse out">
-<table border='1'>
+<table class='table table-bordered'>
 {% for bill in billformset %}
 {% if forloop.counter > 5 %}
     <tr>
@@ -55,7 +55,7 @@
     {% endfor %}
     </tr>
 {% endif %}
-    
+
 {% endfor %}
 </table>
 <tr></tr>
@@ -66,7 +66,7 @@
 </div><!-- request-->
 
 <div class="tab-pane" id="not_yet_received">
-<table border='1'>
+<table class='table table-bordered'>
 <tr>
 <th>Applied Date</th>
 <th>Amount</th>
@@ -110,7 +110,7 @@
 
 </div><!-- not yet received-->
 <div class="tab-pane" id="received">
-<table border='1'>
+<table class='table table-bordered'>
 <tr>
 <th>Applied Date</th>
 <th>Amount</th>
@@ -171,7 +171,7 @@
 {% csrf_token %}
 
 {{reimbformset1.management_form}}
-<table border='1'>
+<table class='table table-bordered'>
 
 {% for reimb in qsetreimb_not_yet_submitted %}
 <tr>
@@ -229,7 +229,7 @@
 {% csrf_token %}
 
 {{reimbformset2.management_form}}
-<table border='1'>
+<table class='table table-bordered'>
 
 {% for reimb in qsetreimb_submitted_not_received %}
 <tr>
@@ -287,7 +287,7 @@
 {% csrf_token %}
 
 {{reimbformset3.management_form}}
-<table border='1'>
+<table class='table table-bordered'>
 
 {% for reimb in qsetreimb_submitted_received %}
 <tr>
@@ -340,13 +340,13 @@
 </form>
 
 </div>
-<!-- 
+<!--
 <h3>Submitted</h3>
 <form method='POST' action=''>
 {% csrf_token %}
 {{reimbformsetsubmitted.management_form}}
 
-<table border='1'>
+<table class='table table-bordered'>
 <tr>
 <th>Applied Date</th>
 <th>Amount</th>
