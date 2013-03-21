@@ -2,6 +2,24 @@
 {% block body %}
 {% if not userprofile.is_core %}
 <br>
+<style>
+.advance_form{
+
+}
+</style>
+{% if advanceform_error %}
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Error Sending Request!</strong> Invalid Input
+</div>
+{% endif %}
+
+{% if advanceform_success %}
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Success</strong> Your Advance Request has been successfully sent.
+</div>
+{% endif %}
 <div class="tabbable tabs-left">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#request" data-toggle="tab">Request</a></li>
@@ -19,12 +37,14 @@
                 {% csrf_token %}
                 <fieldset>
                     <center>
-                        <legend>Request an Advance</legend>
+                       <!-- <legend>Request an Advance</legend>-->
+                       <div class="advance_form">
                         {% for field in advanceform %}
                         <label><strong>{{field.label}}</strong></label>
                         {{field}}
                         {% endfor %}<br>
-                        <input type='submit' value="Send Request" class='btn btn-danger' />
+                        <input type='submit' value="Send Request" class="btn btn-info" />
+                        </div>
                     </center>
                 </fieldset>
             </form>
@@ -33,29 +53,23 @@
 
         <div class="tab-pane" id="awaiting_approval">
             {% if advance_applications_awaiting_approval %}
-            <table class='table table-bordered'>
+            <table class="table table-bordered ">
+            <thead>
                 <tr>
                     <th>Applied Date</th>
                     <th>Amount</th>
                     <th>Split Up</th>
-                    <th>Status</th>
                 </tr>
+            </thead>
+            <tbody>
                 {% for advance_application in advance_applications_awaiting_approval %}
                 <tr>
                     <td>{{advance_application.applied_date}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
-                    {% if advance_application.approved %}
-                    <td>Approved</td>
-                    {% else %}
-                    {% if advance_application.disapproved %}
-                    <td>Disapproved</td>
-                    {% else %}
-                    <td>Awaiting</td>
-                    {% endif %}
-                    {% endif %}
                 </tr>
                 {% endfor %}
+            </tbody>
             </table>
             {% else %}
             <h3> <center>You have no pending approvals. </center> </h3>
@@ -65,34 +79,27 @@
 
         <div class="tab-pane" id="approved_not_received">
             {% if approved_not_rec %}
-            <table class='table table-bordered'>
+            <table class="table table-bordered">
+                <thead>
                 <tr>
                     <th>Applied Date</th>
                     <th>Amount</th>
                     <th>Split Up</th>
-                    <th>Approve Status</th>
                     <th>Approved date</th>
                     <th>Core comments</th>
                 </tr>
+                </thead>
+                <tbody>
                 {% for advance_application in approved_not_rec %}
                 <tr>
                     <td>{{advance_application.applied_date}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
-                    {% if advance_application.approved %}
-                    <td>Approved</td>
                     <td>{{advance_application.approved_date}}</td>
-                    {% else %}
-                    {% if advance_application.disapproved %}
-                    <td>Disapproved</td>
-                    <td>NA</td>
-                    {% else %}
-                    <td>Awaiting</td>
-                    <td>NA</td>
-                    {% endif %}
-                    {% endif %}
+                    <td>{{advance_application.core_comment}}</td>
                 </tr>
                 {% endfor %}
+             </tbody>
             </table>
             {% else %}
             <center><h3>You don't have any advances approved, or you have received amounts for all approved advances.</h3></center>
@@ -102,36 +109,34 @@
         <div class="tab-pane" id="received_add_bills" >
             {% if rec_add_bills %}
             <table class='table table-bordered'>
+            <thead>
                 <tr>
                     <th>Applied Date</th>
                     <th>Amount</th>
                     <th>Split_up</th>
                     <th>Approved_date</th>
-                    <th>Recieved Status</th>
                     <th>Received Date</th>
                     <th>Due Date</th>
                     <th>Core Comments</th>
+                    <th>Bills</th>
                 </tr>
+            </thead>
+            <tbody>
                 {% for advance_application in rec_add_bills %}
                 <tr>
                     <td>{{advance_application.applied_date}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
-                    {% if advance_application.received %}
-                    <td>Received</td>
+                    <td>{{advance_application.approved_date}}</td>
                     <td>{{advance_application.receive_date}}</td>
                     <td>{{advance_application.due_date}}</td>
-                    {% else %}
-                    <td>Not received</td>
-                    <td></td>
-                    <td></td>
-                    {% endif %}
                     <td>{{advance_application.core_comment}}</td>
                     {% if advance_application.approved and advance_application.received %}
                     <td><a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">Add bills</a></td>
                     {% endif %}
                 </tr>
                 {% endfor %}
+            </tbody>
             </table>
             {% else %}
             <center><h3>You have not received any new bills yet.</h3></center>
@@ -139,52 +144,53 @@
         </div><!-- rec_add_bills-->
 
         <div class="tab-pane" id="disapproved">
-            <form method="POST" action=''>{% csrf_token %}<input type="submit" value="Mark as read" class='btn btn-large btn-danger' name="read"></form>
+           
             {% if disapproved_unread %}
-            <h3>Unread</h3>
-            <table class='table table-bordered'>
+            <center><h3>Unread</h3></center></br>
+            <table class="table table-bordered">
+            <thead>
                 <tr>
                     <th>Applied Date</th>
                     <th>Amount</th>
                     <th>Split up</th>
-                    <th>Approved Status</th>
                     <th>Core Comments</th>
                 </tr>
+            </thead>
+            <tbody>
                 {% for advance_application in disapproved_unread %}
                 <tr>
                     <td>{{advance_application.applied_date}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
-                    {% if advance_application.approved %}
-                    <td>Approved</td>
-                    {% else %}
-                    {% if advance_application.disapproved %}
-                    <td>Disapproved</td>
-                    {% else %}
-                    <td>Awaiting</td>
-                    {% endif %}
-                    {% endif %}
                     <td>{{advance_application.core_comment}}</td>
                 </tr>
                 {% endfor %}
+            </tbody>
             </table>
             {% else %}
             <h3>No new unread disapprovals.</h3>
             {% endif %}
+            <div class="pull-right">
+             <form method="POST" action=''>{% csrf_token %}<input type="submit" value="Mark All as read" class="btn btn-info" name="read"></form>
+             </div>
         </div>
         <div id="history" class="tab-pane">
-            <table class='table table-bordered'>
+            <table class="table table-bordered">
+            <thead>
                 <tr>
                     <th>Applied Date</th>
                     <th>Amount</th>
                     <th>Split Up</th>
-                    <th>Approve Status</th>
+                    <th>Approval Status</th>
                     <th>Approved_date</th>
                     <th>Recieved Status</th>
                     <th>Received Date</th>
                     <th>Due Date</th>
                     <th>Core Comments</th>
+                    <th>Bills</th>
                 </tr>
+            </thead>
+            <tbody>
                 {% for advance_application in advance_applications %}
                 <tr>
                     <td>{{advance_application.applied_date}}</td>
@@ -196,10 +202,10 @@
                     {% else %}
                     {% if advance_application.disapproved %}
                     <td>Disapproved</td>
-                    <td></td>
+                    <td>None</td>
                     {% else %}
                     <td>Awaiting</td>
-                    <td></td>
+                    <td>None</td>
                     {% endif %}
                     {% endif %}
 
@@ -209,21 +215,22 @@
                     <td>{{advance_application.due_date}}</td>
                     {% else %}
                     <td>Not received</td>
-                    <td></td>
-                    <td></td>
+                    <td>None</td>
+                    <td>None</td>
                     {% endif %}
                     <td>{{advance_application.core_comment}}</td>
-                    <td>{{advance_application.bill_submitted}}</td>
                     {% if advance_application.approved and advance_application.received %}
                     {% if not advance_application.bill_submitted %}
                     <td><a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">Add bills</a></td>
                     {% else %}
                     <td><a href="{% url finance.views.advance_bill_view advance_id=advance_application.id %}">View bills</a></td>
                     {% endif %}
-
+                    {% else %}
+                    <td></td>
                     {% endif %}
                 </tr>
                 {% endfor %}
+            </tbody>
             </table>
 
             <!-- end for the user -->
@@ -234,7 +241,21 @@
 
 
 {% if userprofile.is_core %}
+
+<style>
+textarea{
+height:27px;
+margin-bottom:1px;    
+        }
+</style>
 <br>
+{% if advance_request_form_success %}
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Success</strong> Project detail has been successfully updated
+</div>
+{% endif %}
+
 <div class="tabbable tabs-left">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#request_core" data-toggle="tab">Advance Requests</a></li>
@@ -247,18 +268,25 @@
                 {% csrf_token %}
                 {{advance_core_formset.management_form}}
 
-                {% for app in pending_advance_app %}
-                <h3 class='alert alert-info'><strong>{{app.project.name}}</strong></h3>
-                <table class='table table-bordered'>
+
+                <!--<h3 class='alert alert-info'><strong>{{app.project.name}}</strong></h3>-->
+                <table class="table table-bordered table-condensed">
+                <thead>
                     <tr>
+                        <th>Project Name</th>
                         <th>Applied Date</th>
                         <th>Amount</th>
                         <th>Split Up</th>
                         <th>Approve</th>
                         <th>Disapprove</th>
                         <th>Comments</th>
+                        <th></th>
                     </tr>
+                </thead>
+                <tbody>
+                {% for app in pending_advance_app %}
                     <tr>
+                        <td>{{app.project.name}}</td>
                         {% for form in advance_core_formset %}
                         {% ifequal form.instance.id app.id %}
                         <td>{{app.applied_date}}</td>
@@ -268,13 +296,13 @@
                         <td>{{field}}</td>
                         {% endfor %}
                         {% endifequal %}
-
                         {% endfor %}
-                        <td><input class='btn btn-primary' type='submit' value='Save' /></td>
+                        <td><input class="btn btn-info" type='submit' value='Save' /></td>
                     </tr>
-
-                </table>
                 {% endfor %}
+                </tbody>
+                </table>
+                
             </form>
         </div><!--request-->
     </div><!-- tabcontent-->

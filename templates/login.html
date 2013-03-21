@@ -4,11 +4,23 @@
 {% block left_bar %}
 {% endblock %}
 {% block body %}
+<center>
+<div class="span4">
+</div>
+<div class="span4">
+<img src="{{MEDIA_URL}}/images/cfi_logo.png" />
+</br>
+<h3>Finance Portal</h3>
+</br>
 <form action='' method='POST' >
 {% csrf_token %}
-<table>
+<div class="well">
+<table >
 {{loginform.as_table}}
 </table>
-<input type="submit" value="login" />
+<input type="submit" class="btn btn-inverse" value="Login" />
+</div>
 </form>
+</div>
+</center>
 {% endblock %}

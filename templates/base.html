@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>C&Phi;</title>
+<title>Center for Innovation | Finance portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="{{ MEDIA_URL }}css/bootstrap.css" rel="stylesheet">
 <link href="{{ MEDIA_URL }}css/bootstrap-responsive.css" rel="stylesheet">
 <link href="{{ MEDIA_URL }}css/chosen.css" rel="stylesheet">
-<link rel='icon' type='image/png' href="{{ MEDIA_URL }}images/favicon.ico">
+<!--<link rel='icon' type='image/png' href="{{ MEDIA_URL }}images/favicon.ico">-->
+<link rel='icon' type='image/png' href="{{ MEDIA_URL }}images/cfi_logo.png">
+
 <style type="text/css">
 body{
 font-size:15px;
 margin-right:4%;
 margin-left:4%;
 }
+
 </style>
 </head>
 <body>
@@ -31,6 +34,12 @@ margin-left:4%;
     {% block top_bar %}
     {% include "top_bar.html" %}
     {% endblock %}
+<div>
+{% if not userprofile.is_core %}
+<h3> &nbsp;  {{userprofile.project.name}}</h3>
+{% endif %}
+</div>
+
         {% block body %}
 
         {% endblock %}

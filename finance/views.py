@@ -49,8 +49,28 @@ def advance(request):
     if request.user.is_authenticated():
         userprofile=UserProfile.objects.get(user=request.user)
         if not userprofile.is_core:
+            if request.method=='POST':
+                advanceform=AdvanceForm(request.POST)
+                if advanceform.is_valid():
+                    advanceform1=advanceform.save(commit=False)
+                    advanceform1.applied_date=date.today()
+                    advanceform1.project=userprofile.project
+                    advanceform1.save()
+                    advanceform_success=True
+                    advanceform=AdvanceForm()
+                else:
+                    advanceform_error=True
+                    
+                if "read" in request.POST:  
+                    read1=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False)
+                    for read2 in read1:
+                        read2.read=True
+                        read2.save()
+                #return HttpResponseRedirect('/advance')
+            else:
+                advanceform=AdvanceForm()  
             advance123=True #for making the top nav bar active
-            advance_applications=Advance.objects.filter(project=userprofile.project)
+            advance_applications=Advance.objects.filter(project=userprofile.project).order_by('-applied_date')
             number_await_approval=len(Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=False))
             number_approved_not_rec=len(Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=False))
             number_rec_add_bills=len(Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=True).filter(bill_submitted=False))
@@ -59,40 +79,22 @@ def advance(request):
             approved_not_rec=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=False)
             rec_add_bills=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=True).filter(bill_submitted=False)
             disapproved_unread=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False)
-            if request.method=='POST':
-                advanceform=AdvanceForm(request.POST)
-                if advanceform.is_valid():
-                    advanceform1=advanceform.save(commit=False)
-                    advanceform1.applied_date=date.today()
-                    advanceform1.project=userprofile.project
-                    advanceform1.save()
-                else:
-                    advanceform_error=True
-                    
-                if "read" in request.POST:  
-                    print "hello there"
-                    read1=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False)
-                    for read2 in read1:
-                        read2.read=True
-                        read2.save()
-                return HttpResponseRedirect('/advance')
-                
-            else:
-                advanceform=AdvanceForm()  
-            
+            return render_to_response('finance/advance.html',locals(),context_instance=RequestContext(request))     
         else:
             advancereq123=True #for making the top nav bar active
             pending_advance_app=Advance.objects.filter(approved=False).filter(disapproved=False)
-            AdvanceCoreFormset=modelformset_factory(Advance,fields=('approved','disapproved','core_comment'))
+            AdvanceCoreFormset=modelformset_factory(Advance,fields=('approved','disapproved','core_comment',))
             if request.method=='POST':
-                #advance_form_core_approval=AdvanceFormCoreApproval(request.POST,instance=)
                 advance_core_formset=AdvanceCoreFormset(request.POST,queryset=pending_advance_app)
                 for form in advance_core_formset.forms:
                     if form.has_changed():
                         form.save()
-                return HttpResponseRedirect('/advance')
+                advance_request_form_success=True
             else:
                 advance_core_formset=AdvanceCoreFormset(queryset=pending_advance_app)
+            advancereq123=True #for making the top nav bar active
+            pending_advance_app=Advance.objects.filter(approved=False).filter(disapproved=False)
+            AdvanceCoreFormset=modelformset_factory(Advance,fields=('approved','disapproved','core_comment',))
                 
         return render_to_response('finance/advance.html',locals(),context_instance=RequestContext(request))      
     else:
@@ -169,6 +171,7 @@ def advance_approved(request):
     if request.user.is_authenticated():
         advance
         userprofile=UserProfile.objects.get(user=request.user)
+        advance_approved_form_error=False
         if userprofile.is_core:
             advanceapp123=True #for making the top nav bar active
             approved_submitted=Advance.objects.filter(approved=True).filter(bill_submitted=True)   
@@ -178,10 +181,18 @@ def advance_approved(request):
                 approved_core_formset=ApprovedCoreFormset(request.POST,queryset=approved_not_submitted)
                 for form in approved_core_formset.forms:
                     if form.has_changed():
-                        form.save()
-                return HttpResponseRedirect('/advance/approved')
+                        if form.is_valid():
+                            form.save()
+                        else:
+                            advance_approved_form_error=True
+                if not advance_approved_form_error:
+                    advance_approved_form_success=True
             else:
                 approved_core_formset=ApprovedCoreFormset(queryset=approved_not_submitted)
+            advanceapp123=True #for making the top nav bar active
+            approved_submitted=Advance.objects.filter(approved=True).filter(bill_submitted=True)   
+            approved_not_submitted=Advance.objects.filter(approved=True).filter(bill_submitted=False)
+            ApprovedCoreFormset=modelformset_factory(Advance,fields=('received','receive_date','due_date','core_comment','bill_submitted'))
             return render_to_response('finance/advance_approved.html',locals(),context_instance=RequestContext(request))    
         else:
             raise Http404
