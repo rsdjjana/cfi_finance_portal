@@ -1,6 +1,28 @@
 {% extends "base.html" %}
 {% block body %}
 </br>
+<style>
+    
+    input{
+      width:100px;
+    }
+    textarea{
+        height:35px;
+        margin-bottom:1px;    
+        width:auto;
+        margin-right:0px;
+        }
+        
+        .layoutfixed table{
+            table-layout:fixed;
+            
+        }
+        
+        .well1{
+            background-color:#f5f5e7;
+        }
+</style>
+
 {% if not userprofile.is_core %}
 <div class="tabbable tabs-left">
     <ul class="nav nav-tabs">
@@ -11,24 +33,19 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="request">
-            <h3 class='alert alert-info'> <strong>{{userprofile.project.name}}</strong></h3>
-            <br>
-            <form method='POST' action=''>
+               <form method='POST' action=''>
                 {% csrf_token %}
-
-                <div class='well'>{{reimbform}}</div>
-
-
+                   {{reimbform}}
                 {{billformset.management_form}}
 
-                <table class='table table-bordered table-condensed'>
+                <table class="table table-bordered table-condensed">
                     <tr>
                         <th>Shop Name</th>
                         <th>Bill Number</th>
                         <th>Purchase Details</th>
                         <th>Amount</th>
                         <th>Dated</th>
-                        <th>Delete</th>
+                       
                     </tr>
                     {% for bill in billformset %}
                     {% if not forloop.counter > 5 %}
@@ -45,7 +62,7 @@
                 </br>
 
                 <div id="extra" class="collapse out">
-                    <table class='table table-bordered'>
+                    <table class="table table-bordered">
                         {% for bill in billformset %}
                         {% if forloop.counter > 5 %}
                         <tr>
@@ -60,30 +77,43 @@
                     <tr></tr>
                 </table>
             </div>
-
-            <center><button type="button" class="btn btn-primary btn-large" data-toggle="collapse" data-target="#extra">Add more bills</button>
-                <input type='submit' class='btn btn-danger btn-large' value="Send Request" />
+            <div>
+            <button type="button" class="btn" data-toggle="collapse" data-target="#extra">Add more bills </button>
+            </div>
+            <center>    <input type='submit' class="btn btn-info " value="Send Request" />
             </center>
         </form>
     </div><!-- request-->
 
-    <div class="tab-pane" id="not_yet_received">
+    <div class="tab-pane layoutfixed" id="not_yet_received">
         {% if reimbset_not_received %}
-        <table class='table table-bordered'>
+        <table class="table table-bordered">
             <tr>
                 <th>Applied Date</th>
                 <th>Amount</th>
                 <th>Received Status</th>
                 <th>Received Date</th>
+                <th>Bill Details</th>
             </tr>
+        </table>
+            <div class="accordion">
             {% for reimb in reimbset_not_received %}
+        
+            <div class="accordion-group">
+        <table class="table table-bordered">
+            <div class="accordion-heading">
             <tr>
-                <td>{{reimb.applied_date}}</td>
+                <td >{{reimb.applied_date}}</td>
                 <td>{{reimb.amount}}</td>
-
                 <td>{{reimb.received}}</td>
                 <td>{{reimb.received_date}}</td>
+                <td><a class="accordion-toggle" data-toggle="collapse" href="#{{reimb.id}}"><span style="font-size:27px;">&darr;</span></a></td>
             </tr>
+            </div>
+            </table>
+            <div id="{{reimb.id}}" class="accordion-body collapse out">
+            <div class="accordion-inner well1">
+            <table class="table table-bordered">
             <tr><td>Bill Details</td></tr>
             <tr>
 
@@ -106,32 +136,51 @@
 
             {% endifequal %}
             {% endfor%}
-            <tr></tr>
+            </table>
+            </div>
+            </div><!-- bill_detail body-->
+           </div><!-- accordian group-->
+        
             {% endfor %}
-        </table>
+            </div>
+        
         {%else%}
         <h3> No requests! </h3>
         {% endif %}
 
     </div><!-- not yet received-->
-    <div class="tab-pane" id="received">
+
+    <div class="tab-pane layoutfixed" id="received">
         {% if reimbset_received %}
-        <table class='table table-bordered'>
+        <table class="table table-bordered">
             <tr>
                 <th>Applied Date</th>
                 <th>Amount</th>
-
                 <th>Received Status</th>
                 <th>Received Date</th>
+                <th>Bill Details</th>
             </tr>
+        </table>
+        <div class="accordion">
+        <div class="accordion-group">
+       
             {% for reimb in reimbset_received %}
+            <table class="table table-bordered">
+            <div class="accordion-heading ">
             <tr>
                 <td>{{reimb.applied_date}}</td>
                 <td>{{reimb.amount}}</td>
-
                 <td>{{reimb.received}}</td>
                 <td>{{reimb.received_date}}</td>
+                
+              <td><a class="accordion-toggle" data-toggle="collapse" href="#rec{{reimb.id}}"> <span style="font-size:27px;">&darr;</span></a></td>
             </tr>
+            </div>
+            </table>
+        <div class="accordion-body collapse out" id="rec{{reimb.id}}">
+        <div class="accordion-inner well1" >
+            <table class="table table-bordered table-condensed">
+        
             <tr><td>Bill Details</td></tr>
             <tr>
 
@@ -154,17 +203,21 @@
 
             {% endifequal %}
             {% endfor%}
-            <tr></tr>
+            </table>
+            </div>
+            </div>
             {% endfor %}
-        </table>
+            </div><!-- accordion group-->
+        </div><!-- accordion-->
         {% else %}
         <h3> No requests! </h3>
         {% endif %}
+        
     </div><!-- received-->
-
 </div><!-- content -->
 </div><!-- tabbable-->
 {% endif %}<!-- end of user -->
+
 
 {% if userprofile.is_core %}
 <div class="tabbable tabs-left">
@@ -179,7 +232,8 @@
                 {% csrf_token %}
                 {{reimbformset1.management_form}}
                 {% if qsetreimb_not_yet_submitted %}
-                <table class='table table-bordered'>
+                <div class="accordion layoutfixed">
+                <table class="table table-bordered">
 
                     <tr>
                         <th>Project</th>
@@ -188,25 +242,42 @@
                         <th>Received Status</th>
                         <th>Received Date</th>
                         <th>Submitted?</th>
+                  
+                        <th>Bill Details</th>
                     </tr>
+                </table>
+                
+                <div class="accordion-group">
                     {% for reimb in qsetreimb_not_yet_submitted %}
-                    <tr>
+                <table class="table table-bordered">
+                <div class="accordion-heading">
+                     <tr>
                         <td>{{reimb.project.name}}</td>
                         <td>{{reimb.applied_date}}</td>
                         <td>{{reimb.amount}}</td>
-
                         {% for form in reimbformset1 %}
                         {% ifequal form.instance.id reimb.id %}
                         {% for field in form %}
+                        {% if not forloop.last %}
                         <td>{{field}}</td>
+                        {% else %}
+                        {{field}}
+                        {% endif %}
+                        
                         {% endfor %}
                         {% endifequal %}
                         {% endfor %}
-                        <td><input type='submit' value='Update' name="one" /></td>
+                       <td><a data-toggle="collapse" class="accordion-toggle" href="#corenys{{reimb.id}}"><span style="font-size:27px">&darr;</span></a></td> 
+                   
                     </tr>
+                    </div><!-- heading-->
+                 </table>
+                 <div class="accordion-body collapse out" id="corenys{{reimb.id}}">
+                 <div class="accordion-inner well1">
+                 <table class="table table-bordered">
+
                     <tr><td>Bill Details</td></tr>
                     <tr>
-
                         <th>Shop Name</th>
                         <th>Bill Number</th>
                         <th>Purchase Details</th>
@@ -226,9 +297,13 @@
 
                     {% endifequal %}
                     {% endfor%}
-                    <tr></tr>
+                   </table>
+                   </div>
+                   </div><!--body -->
                     {% endfor %}
-                </table>
+                    </div><!-- accordion group-->
+                    </div><!-- accordion-->
+         <center>     <input type='submit' class="btn btn-info" value='Update' name="one" /> </center>
             </form>
             {% else %}
             <h3>Nothing to show here.</h3>
@@ -240,8 +315,9 @@
                 {% csrf_token %}
 
                 {{reimbformset2.management_form}}
-                <table class='table table-bordered'>
-
+                <div class="accordion layoutfixed">
+                
+                <table class="table table-bordered">
                     <tr>
                         <th>Project</th>
                         <th>Applied Date</th>
@@ -249,8 +325,13 @@
                         <th>Received Status</th>
                         <th>Received Date</th>
                         <th>Submitted?</th>
+                        <th>Bill Details</th>
                     </tr>
-                    {% for reimb in qsetreimb_submitted_not_received %}
+                </table>
+                <div class="accordion-group">
+                {% for reimb in qsetreimb_submitted_not_received %}
+                  <table class="table table-bordered">
+                  <div class="accordion-heading">
                     <tr>
                         <td>{{reimb.project.name}}</td>
                         <td>{{reimb.applied_date}}</td>
@@ -259,12 +340,24 @@
                         {% for form in reimbformset2 %}
                         {% ifequal form.instance.id reimb.id %}
                         {% for field in form %}
+                        {% if not forloop.last %}
                         <td>{{field}}</td>
+                        {% else %}
+                        {{field}}
+                        {% endif %}
                         {% endfor %}
                         {% endifequal %}
                         {% endfor %}
-                        <td><input type='submit' value='Update' name="two" /></td>
+                         <td><a data-toggle="collapse" class="accordion-toggle" href="#coresnr{{reimb.id}}"><span style="font-size:27px">&darr;</span></a></td> 
                     </tr>
+                </div>
+                </table>
+                
+                <div class="accordion-body collapse out" id="coresnr{{reimb.id}}">
+                 <div class="accordion-inner well1">
+                 
+                <table class="table table-bordered">
+                    
                     <tr><td>Bill Details</td></tr>
                     <tr>
 
@@ -287,19 +380,25 @@
 
                     {% endifequal %}
                     {% endfor%}
-                    <tr></tr>
-                    {% endfor %}
                 </table>
+                </div>
+                </div>
+                    {% endfor %}
+                
+                </div><!-- accordion-group-->
+                </div><!-- accordion -->
+<center>                <input type='submit' class="btn btn-info" value='Update' name="two" /></center>
             </form>
 
         </div>
+        
+        
         <div class="tab-pane" id="submitted_received">
             <form method='POST' action=''>
                 {% csrf_token %}
-
                 {{reimbformset3.management_form}}
-                <table class='table table-bordered'>
-
+                 <div class="accordion layoutfixed">
+               <table class='table table-bordered'>
                     <tr>
                         <th>Project</th>
                         <th>Applied Date</th>
@@ -307,9 +406,14 @@
                         <th>Received Status</th>
                         <th>Received Date</th>
                         <th>Submitted?</th>
+                        <th>Bill details</th>
                     </tr>
-                    {% for reimb in qsetreimb_submitted_received %}
-                    <tr>
+                    </table>
+                 <div class="accordion-group">
+                   {% for reimb in qsetreimb_submitted_received %}
+                     <table class='table table-bordered'>
+                     <div class="accordion-heading">
+                     <tr>
                         <td>{{reimb.project.name}}</td>
                         <td>{{reimb.applied_date}}</td>
                         <td>{{reimb.amount}}</td>
@@ -317,13 +421,24 @@
                         {% for form in reimbformset3 %}
                         {% ifequal form.instance.id reimb.id %}
                         {% for field in form %}
+                        {% if not forloop.last %}
                         <td>{{field}}</td>
+                        {% else %}
+                        {{field}}
+                        {% endif %}
                         {% endfor %}
                         {% endifequal %}
                         {% endfor %}
-                        <td><input type='submit' value='Update' name="three" /></td>
-                    </tr>
-                    <tr><td>Bill Details</td></tr>
+                        
+                        <td><a data-toggle="collapse" class="accordion-toggle" href="#coresr{{reimb.id}}"><span style="font-size:27px">&darr;</span></a></td> 
+                      </tr>
+                      </div>
+                      </table>
+                      <div class="accordion-body collapse out" id="coresr{{reimb.id}}">
+                 <div class="accordion-inner well1">
+                 
+                <table class='table table-bordered'>
+                     <tr><td>Bill Details</td></tr>
                     <tr>
 
                         <th>Shop Name</th>
@@ -345,9 +460,13 @@
 
                     {% endifequal %}
                     {% endfor%}
-                    <tr></tr>
+                    </table>
+                    </div>
+                    </div>
                     {% endfor %}
-                </table>
+                </div><!--group -->
+                </div><!-- accordion -->
+<center>                <input type='submit' class="btn btn-info " value='Update' name="three" /></center>
             </form>
 
         </div>

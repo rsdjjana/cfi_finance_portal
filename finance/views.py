@@ -144,29 +144,6 @@ def advance_bill_view(request,advance_id):
         return render_to_response('finance/advance_bill_view.html',locals(),context_instance=RequestContext(request))
             
             
-            
-'''
-def reimb(request):
-    userprofile=UserProfile.objects.get(user=request.user)
-    
-    if request.method=='POST':
-        reimbform=ReimbForm(request.POST)
-        if reimbform.is_valid():
-            reimbform1=reimbform.save(commit=False)
-            reimbform1.applied_date=date.today()
-            reimbform1.project=userprofile.project
-            reimbform1.save()
-        else:
-            reimbform_error=True
-        return HttpResponseRedirect('/reimb')
-        
-    else:
-        reimbform=ReimbForm()  
-    return render_to_response('finance/reimb.html',locals(),context_instance=RequestContext(request))      
-    
-'''
-    
-    
 def advance_approved(request):
     if request.user.is_authenticated():
         advance
@@ -257,7 +234,7 @@ def reimb(request):
         else:
             reimb123=True
             extra1=2
-            BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated'),extra=10, can_delete=True)
+            BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated'),extra=10,)
             reimb_applications=Reimb.objects.filter(project=userprofile.project)
             bills_limit=5
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=False)
@@ -273,17 +250,12 @@ def reimb(request):
                 billformset=BillFormset(request.POST,queryset=qset)
                 for form in billformset.forms:
                     if form.has_changed():
-                        if form not in billformset.deleted_forms:
-                            form_instance=form.save(commit=False)
-                            form_instance.is_advance=False
-                            form_instance.project=userprofile.project
-                            form_instance.reimb=reimbform1
-                            form_instance.save()
-                        else:
-                            if BillDetail.objects.filter(id=form.instance.id):
-                                form_instance=BillDetail.objects.get(id=form.instance.id)
-                                form_instance.delete()            
-                
+                        form_instance=form.save(commit=False)
+                        form_instance.is_advance=False
+                        form_instance.project=userprofile.project
+                        form_instance.reimb=reimbform1
+                        form_instance.save()
+                        
                 return HttpResponseRedirect('/reimb')
                 
             else:
