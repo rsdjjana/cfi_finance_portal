@@ -64,7 +64,7 @@
             <tbody>
                 {% for advance_application in advance_applications_awaiting_approval %}
                 <tr>
-                    <td>{{advance_application.applied_date}}</td>
+                    <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
                 </tr>
@@ -92,10 +92,10 @@
                 <tbody>
                 {% for advance_application in approved_not_rec %}
                 <tr>
-                    <td>{{advance_application.applied_date}}</td>
+                    <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
-                    <td>{{advance_application.approved_date}}</td>
+                    <td>{{advance_application.approved_date|date:'d M Y'}}</td>
                     <td>{{advance_application.core_comment}}</td>
                 </tr>
                 {% endfor %}
@@ -124,12 +124,12 @@
             <tbody>
                 {% for advance_application in rec_add_bills %}
                 <tr>
-                    <td>{{advance_application.applied_date}}</td>
+                    <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
-                    <td>{{advance_application.approved_date}}</td>
-                    <td>{{advance_application.receive_date}}</td>
-                    <td>{{advance_application.due_date}}</td>
+                    <td>{{advance_application.approved_date|date:'d M Y'}}</td>
+                    <td>{{advance_application.receive_date|date:'d M Y'}}</td>
+                    <td>{{advance_application.due_date|date:'d M Y'}}</td>
                     <td>{{advance_application.core_comment}}</td>
                     {% if advance_application.approved and advance_application.received %}
                     <td><a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">Add bills</a></td>
@@ -159,7 +159,7 @@
             <tbody>
                 {% for advance_application in disapproved_unread %}
                 <tr>
-                    <td>{{advance_application.applied_date}}</td>
+                    <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
                     <td>{{advance_application.core_comment}}</td>
@@ -193,12 +193,12 @@
             <tbody>
                 {% for advance_application in advance_applications %}
                 <tr>
-                    <td>{{advance_application.applied_date}}</td>
+                    <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td>{{advance_application.split_up}}</td>
                     {% if advance_application.approved %}
                     <td>Approved</td>
-                    <td>{{advance_application.approved_date}}</td>
+                    <td>{{advance_application.approved_date|date:'d M Y'}}</td>
                     {% else %}
                     {% if advance_application.disapproved %}
                     <td>Disapproved</td>
@@ -211,8 +211,8 @@
 
                     {% if advance_application.received %}
                     <td>Received</td>
-                    <td>{{advance_application.receive_date}}</td>
-                    <td>{{advance_application.due_date}}</td>
+                    <td>{{advance_application.receive_date|date:'d M Y'}}</td>
+                    <td>{{advance_application.due_date|date:'d M Y'}}</td>
                     {% else %}
                     <td>Not received</td>
                     <td>None</td>
@@ -289,7 +289,7 @@ margin-bottom:1px;
                         <td>{{app.project.name}}</td>
                         {% for form in advance_core_formset %}
                         {% ifequal form.instance.id app.id %}
-                        <td>{{app.applied_date}}</td>
+                        <td>{{app.applied_date|date:'d M Y'}}</td>
                         <td>{{app.amount}}</td>
                         <td>{{app.split_up}}</td>
                         {% for field in form %}

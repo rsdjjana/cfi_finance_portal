@@ -8,7 +8,7 @@
         margin-bottom:1px;    
         }
     input{
-        width:55px;
+        width:65px;
     }
 </style>
 {% if advance_approved_form_error %}
@@ -39,19 +39,17 @@
     <table class="table table-bordered table-condensed">
     <thead>
     <tr>
-    <th>Project Name</th>
+    <th>Project</th>
     <th>Applied Date</th>
     <th>Amount</th>
     <th>Split Up</th>
     <th>Approved Date</th>
     <th>Received</th>
-    <th>Received Date</th>
-    <th>Due Date</th>
+    <th>Received Date <h6>(yyyy-mm-dd)</h6></th>
+    <th>Due Date<h6>(yyyy-mm-dd)</h6></th>
     <th>Comments</th>
     <th>Bills Submitted?</th>
-    <th></th>
     <th>Bills</th>
-    <th></th>
     </tr>
     </thead>
     <tbody>
@@ -61,12 +59,16 @@
     {% for form in approved_core_formset %}
 
         {% ifequal form.instance.id app.id %}
-        <td>{{app.applied_date}}</td>
+        <td>{{app.applied_date|date:'d M Y'}}</td>
         <td>{{app.amount}}</td>
         <td>{{app.split_up}}</td>
-        <td>{{app.approved_date}}</td>
+        <td>{{app.approved_date|date:'d M Y'}}</td>
         {% for field in form %}
+        {% if not forloop.last %}
         <td>{{field}}</td>
+        {% else %}
+        {{field}}
+        {% endif %}
         {% endfor %}
         {% if app.approved and app.received %}
 <td><a href="{% url finance.views.advance_bill advance_id=app.id %}">View bills</a></td>
@@ -77,12 +79,11 @@
         {% endifequal %}
     
     {% endfor %}
-<td><input class="btn btn-info" type='submit' value='Save' /></td>
     </tr>
     {% endfor %}
     </tbody>
     </table>
-
+<center><input class="btn btn-info" type='submit' value='Save' /></center>
 </form>
 
 </div><!-- notyetsub -->
@@ -105,12 +106,12 @@
 {% for advance in approved_submitted %}
 <tr>
 <td>{{advance.project.name}}</td>
-<td>{{advance.applied_date}}</td>
+<td>{{advance.applied_date|date:'d M Y'}}</td>
 <td>{{advance.amount}}</td>
 <td>{{advance.split_up}}</td>
-<td>{{advance.approved_date}}</td>
-<td>{{advance.receive_date}}</td>
-<td>{{advance.due_date}}</td>
+<td>{{advance.approved_date|date:'d M Y'}}</td>
+<td>{{advance.receive_date|date:'d M Y'}}</td>
+<td>{{advance.due_date|date:'d M Y'}}</td>
 <td>{{advance.core_comment}}</td> 
 <td><a href="{% url finance.views.advance_bill advance_id=advance.id %}">View bills</a></td>
 </tr> 

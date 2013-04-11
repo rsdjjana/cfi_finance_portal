@@ -66,6 +66,7 @@ def advance(request):
                     for read2 in read1:
                         read2.read=True
                         read2.save()
+                    advanceform_error=False
                 #return HttpResponseRedirect('/advance')
             else:
                 advanceform=AdvanceForm()  

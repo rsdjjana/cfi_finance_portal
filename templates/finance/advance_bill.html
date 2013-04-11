@@ -4,9 +4,7 @@
 <div class="pull-right">
 <a href="/advance/"><button class="btn">Back</button></a>
 </div>
-
-<h3>{{advance_application.project.name}}</h3>
-<table border='1'>
+<table class="table table-bordered">
 <tr>
 <th>Applied Date</th>
 <th>Amount</th>
@@ -20,12 +18,12 @@
 </tr>
 
 <tr>
-<td>{{advance_application.applied_date}}</td>
+<td>{{advance_application.applied_date|date:'d M Y'}}</td>
 <td>{{advance_application.amount}}</td>
 <td>{{advance_application.split_up}}</td>
 {% if advance_application.approved %}
 <td>Approved</td>
-<td>{{advance_application.approved_date}}</td>
+<td>{{advance_application.approved_date|date:'d M Y'}}</td>
 {% else %}
 {% if advance_application.disapproved %}
 <td>Disapproved</td>
@@ -38,8 +36,8 @@
 
 {% if advance_application.received %}
 <td>Received</td>
-<td>{{advance_application.receive_date}}</td>
-<td>{{advance_application.due_date}}</td>
+<td>{{advance_application.receive_date|date:'d M Y'}}</td>
+<td>{{advance_application.due_date|date:'d M Y'}}</td>
 {% else %}
 <td>Not received</td>
 <td></td>
@@ -53,7 +51,7 @@
 {% csrf_token %}
 {{billformset.management_form}}
 
-<table border='1'>
+<table class="table table-bordered">
 <tr>
 <th>Shop Name</th>
 <th>Bill Number</th>
@@ -70,9 +68,8 @@
     {% endfor %}
     </tr>
 {% endfor %}
-
-<table>
-<input type='submit' value='Save' />
+</table>
+<center><input type='submit' class="btn btn-info " value='Save' /></center>
 </form>
 
 {% endif %}<!-- end of user -->

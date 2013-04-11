@@ -9,47 +9,50 @@
 </ul>
 <div class="tab-content">
 <div class="tab-pane active" id="advance">
-<h4>Not yet submitted</h4>
-<table border='1'>
+<h4>Not yet submitted</h4></br>
+<table class="table table-bordered">
+<thead>
 <tr>
+<th>Project</th>
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
-<th>Submitted?</th>
 </tr>
+</thead>
 {% for bill in advance_bills_not_sub %}
 <tr>
+<td>{{bill.project.name}}</td>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.purchase_detail}}</td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
-<td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}
 </table>
 
-<h4>Submitted</h3>
-<table border='1'>
+<h4>Submitted</h4>
+</br>
+<table class="table table-bordered">
 <tr>
+<th>Project</th>
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
-<th>Submitted?</th>
 </tr>
 
 {% for bill in advance_bills_sub %}
 <tr>
+<td>{{bill.project.name}}</td>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.purchase_detail}}</td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
-<td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}
 </table>
@@ -58,15 +61,14 @@
 
 <div class="tab-pane" id="reimb">
 
-<h4>Not yet submitted</h4>
-<table border='1'>
+<h4>Not yet submitted</h4></br>
+<table class="table table-bordered">
 <tr>
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
-<th>Submitted?</th>
 </tr>
 {% for bill in reimb_bills_not_sub %}
 <tr>
@@ -75,20 +77,18 @@
 <td>{{bill.purchase_detail}}</td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
-<td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}
 
 </table>
-<h4>Submitted</h4>
-<table border='1'>
+<h4>Submitted</h4></br>
+<table class="table table-bordered">
 <tr>
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
-<th>Submitted?</th>
 </tr>
 {% for bill in reimb_bills_sub %}
 <tr>
@@ -97,7 +97,6 @@
 <td>{{bill.purchase_detail}}</td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
-<td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}
 
@@ -108,7 +107,8 @@
 <form method="post" action=''>
 {% csrf_token %}
 {{excelformset.management_form}}
-<table border='1'>
+<h4>Not Yet Submitted</h4></br>
+<table class="table table-bordered table-condensed">
 <tr>
 <th>Shop Name</th>
 <th>Bill Number</th>
@@ -118,7 +118,7 @@
 <th>Submitted?</th>
 <th>Add to Excel</th>
 </tr>
-<tr><td>Not Yet Submitted</td></tr>
+
 {% for bill in qset %}
 {% if not bill.core_submitted %}
 <tr>
@@ -137,8 +137,19 @@
 </tr>
 {% endif %}
 {% endfor %}
+</table>
 
-<tr><td>Submitted</td></tr>
+<h4>Submitted</h4></br>
+<table class="table table-bordered table-condensed">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Purchase Details</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Submitted?</th>
+<th>Add to Excel</th>
+</tr>
 {% for bill in qset %}
 {% if bill.core_submitted %}
 <tr>
@@ -158,8 +169,8 @@
 {% endif %}
 {% endfor %}
 </table>
-<input type="submit" value="Save" >
-<input type="submit" value="Create Excel Sheet" name="excel">
+<center><input type="submit" class="btn btn-info " value="Save" >
+<input type="submit" class="btn btn-primary " value="Create Excel Sheet" name="excel"></center>
 </form>
 </div>
 </div><!-- content -->

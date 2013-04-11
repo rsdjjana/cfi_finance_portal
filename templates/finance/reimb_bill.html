@@ -233,14 +233,14 @@
                 {{reimbformset1.management_form}}
                 {% if qsetreimb_not_yet_submitted %}
                 <div class="accordion layoutfixed">
-                <table class="table table-bordered">
+                <table class="table table-bordered ">
 
                     <tr>
                         <th>Project</th>
                         <th>Applied Date</th>
                         <th>Amount</th>
                         <th>Received Status</th>
-                        <th>Received Date</th>
+                        <th>Received Date<h6>(yyyy-mm-dd)</h6></th>
                         <th>Submitted?</th>
                   
                         <th>Bill Details</th>
@@ -249,11 +249,11 @@
                 
                 <div class="accordion-group">
                     {% for reimb in qsetreimb_not_yet_submitted %}
-                <table class="table table-bordered">
+                <table class="table table-bordered table-condensed">
                 <div class="accordion-heading">
                      <tr>
                         <td>{{reimb.project.name}}</td>
-                        <td>{{reimb.applied_date}}</td>
+                        <td>{{reimb.applied_date|date:'d M Y'}}</td>
                         <td>{{reimb.amount}}</td>
                         {% for form in reimbformset1 %}
                         {% ifequal form.instance.id reimb.id %}
@@ -323,18 +323,18 @@
                         <th>Applied Date</th>
                         <th>Amount</th>
                         <th>Received Status</th>
-                        <th>Received Date</th>
+                        <th>Received Date<h6>(yyyy-mm-dd)</h6></th>
                         <th>Submitted?</th>
                         <th>Bill Details</th>
                     </tr>
                 </table>
                 <div class="accordion-group">
                 {% for reimb in qsetreimb_submitted_not_received %}
-                  <table class="table table-bordered">
+                  <table class="table table-bordered table-condensed">
                   <div class="accordion-heading">
                     <tr>
                         <td>{{reimb.project.name}}</td>
-                        <td>{{reimb.applied_date}}</td>
+                        <td>{{reimb.applied_date|date:'d M Y'}}</td>
                         <td>{{reimb.amount}}</td>
 
                         {% for form in reimbformset2 %}
@@ -404,18 +404,18 @@
                         <th>Applied Date</th>
                         <th>Amount</th>
                         <th>Received Status</th>
-                        <th>Received Date</th>
+                        <th>Received Date<h6>(yyyy-mm-dd)</h6>()</th>
                         <th>Submitted?</th>
                         <th>Bill details</th>
                     </tr>
                     </table>
                  <div class="accordion-group">
                    {% for reimb in qsetreimb_submitted_received %}
-                     <table class='table table-bordered'>
+                     <table class="table table-bordered table-condensed">
                      <div class="accordion-heading">
                      <tr>
                         <td>{{reimb.project.name}}</td>
-                        <td>{{reimb.applied_date}}</td>
+                        <td>{{reimb.applied_date|date:'d M Y'}}</td>
                         <td>{{reimb.amount}}</td>
 
                         {% for form in reimbformset3 %}
