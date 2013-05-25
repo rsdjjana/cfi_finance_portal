@@ -1,3 +1,11 @@
 {% extends "base.html" %}
 {% block body %}<center>
-    <img src="http://4.bp.blogspot.com/-HnexK3tLz7s/UJBKRy5Bw9I/AAAAAAAADtg/-XTeupiM7Kc/s1600/dontpanic_full.jpg"> </center> {% endblock %}
+
+    <h1>Welcome to CFI Finance Portal</h1> </center>
+
+    </br>
+    </br>
+{% if not userprofile.is_core %}
+    <h3>Project Details</h3>
+{% endif %}
+     {% endblock %}

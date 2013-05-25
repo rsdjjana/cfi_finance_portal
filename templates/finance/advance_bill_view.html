@@ -4,8 +4,7 @@ hello
 <div class="pull-right">
 <a href="/advance/"><button class="btn">Back</button></a>
 </div>
-<h3>{{advance_application.project.name}}</h3>
-hello
+
 <table class="table table-bordered">
 <thead>
 <tr>
@@ -61,7 +60,10 @@ hello
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
 <th>Submitted?</th>
+{% endif %}
 </tr>
 {% for bill in qset %}
 <tr>
@@ -70,7 +72,10 @@ hello
 <td>{{bill.purchase_detail}}</td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
+{% endif %}
 </tr>
 {% endfor %}
 

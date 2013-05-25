@@ -22,6 +22,19 @@
             background-color:#f5f5e7;
         }
 </style>
+{% if reimbform_error %}
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Error Sending Request!</strong> Invalid Input
+</div>
+{% endif %}
+
+{% if form1_success %}
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Success</strong> Your Reimbursement Request has been successfully sent.
+</div>
+{% endif %}
 
 {% if not userprofile.is_core %}
 <div class="tabbable tabs-left">
@@ -45,6 +58,7 @@
                         <th>Purchase Details</th>
                         <th>Amount</th>
                         <th>Dated</th>
+                        <th>Date</th>
                        
                     </tr>
                     {% for bill in billformset %}
@@ -398,13 +412,13 @@
                 {% csrf_token %}
                 {{reimbformset3.management_form}}
                  <div class="accordion layoutfixed">
-               <table class='table table-bordered'>
+               <table class="table table-bordered">
                     <tr>
                         <th>Project</th>
                         <th>Applied Date</th>
                         <th>Amount</th>
                         <th>Received Status</th>
-                        <th>Received Date<h6>(yyyy-mm-dd)</h6>()</th>
+                        <th>Received Date<h6>(yyyy-mm-dd)</h6></th>
                         <th>Submitted?</th>
                         <th>Bill details</th>
                     </tr>

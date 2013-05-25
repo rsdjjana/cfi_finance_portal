@@ -4,9 +4,21 @@
 {% block left_bar %}
 {% endblock %}
 {% block body %}
+
+<style>
+body{
+background-image:url("{{MEDIA_URL}}/images/rupee.jpg");
+padding-left:0;
+background-size:cover;
+
+background-repeat:no-repeat;
+margin:0;
+}
+
+</style>
+
+
 <center>
-<div class="span4">
-</div>
 <div class="span4">
 <img src="{{MEDIA_URL}}/images/cfi_logo.png" />
 </br>
@@ -14,8 +26,8 @@
 </br>
 <form action='' method='POST' >
 {% csrf_token %}
-<div class="well">
-<table >
+<div >
+<table>
 {{loginform.as_table}}
 </table>
 <input type="submit" class="btn btn-inverse" value="Login" />

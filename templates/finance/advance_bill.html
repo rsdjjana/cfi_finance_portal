@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% block body %}
 {% if not userprofile.is_core %}
+<style>
+    textarea{
+        height:27px;
+        margin-bottom:1px;    
+        }
+    input{
+        width:80px;
+    }
+</style>
 <div class="pull-right">
 <a href="/advance/"><button class="btn">Back</button></a>
 </div>
@@ -50,25 +59,47 @@
 <form method='POST' action=''>
 {% csrf_token %}
 {{billformset.management_form}}
-
-<table class="table table-bordered">
+<!--{{purchasedetailformset.management_form}}-->
+<table class="table table-bordered table-condensed">
 <tr>
 <th>Shop Name</th>
 <th>Bill Number</th>
-<th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
 <th></th>
 <th>Delete</th>
 </tr>
+
 {% for bill in billformset %}
+
     <tr>
     {% for field in bill %}
     <td>{{field}}</td>
     {% endfor %}
     </tr>
+
+<!--
+<table class="table table-bordered">
+<tr>
+<th>Item Name</th>
+<th>Amount</th>
+</tr>
+{% for item in purchasedetailformset %}
+{% ifequal item.bill bill %}
+<tr>
+{% for field in item %}
+<td>{{field}}</td>
+{% endfor %}
+</tr>
+{% endifequal %}
 {% endfor %}
 </table>
+-->
+{% endfor %}
+</table>
+
+<input type="submit" class="btn" name="add_more" value="Add more bills">
 <center><input type='submit' class="btn btn-info " value='Save' /></center>
 </form>
 
@@ -80,7 +111,7 @@
 </div>
 
 <h3>{{advance_application.project.name}}</h3>
-<table border='1'>
+<table class="table table-bordered">
 <tr>
 
 <th>Applied Date</th>
@@ -127,13 +158,14 @@
    
 </table>
 </br>
-<table border='1'>
+<table class="table table-bordered">
 <tr>
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
 <th>Submitted?</th>
 </tr>
 {% for bill in qset %}
@@ -143,6 +175,7 @@
 <td>{{bill.purchase_detail}}</td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
 <td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}

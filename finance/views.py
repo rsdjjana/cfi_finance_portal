@@ -4,7 +4,9 @@ from finance.forms import *
 from django.contrib import auth
 from django.forms.models import modelformset_factory
 from datetime import date
+from django.forms import *
 import xlwt
+from django.forms.extras.widgets import SelectDateWidget
 
 def login(request):
     if request.method=='POST':
@@ -110,10 +112,25 @@ def advance_bill(request,advance_id):
             return render_to_response('finance/advance_bill.html',locals(),context_instance=RequestContext(request))
             
         else:
-            BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated'),extra=2,  can_delete=True)
+            n=1
+            #m=1
+            BillFormset=modelformset_factory(BillDetail, fields=('shop_name','bill_number','amount','dated','date'), extra=n,  can_delete=True, widgets = { })
+            #PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True)
             advance_application=Advance.objects.get(id=advance_id)
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=True).filter(advance=advance_application)
+            #qset_purchase=PurchaseDetail.objects.all()
             
+            #purchase1=PurchaseDetail.objects.all()
+            """
+            does_exist=False
+            for qset1 in qset:
+                for purchase2 in purchase1:
+                    if purchase2.bill == qset1:
+                        does_exist=True
+                if not does_exist:
+                    new=PurchaseDetail(bill=qset1)
+                    new.save()
+            """
             if request.method=='POST':
                 billformset=BillFormset(request.POST,queryset=qset)
                 for form in billformset.forms:
@@ -128,9 +145,30 @@ def advance_bill(request,advance_id):
                             if BillDetail.objects.filter(id=form.instance.id):
                                 form_instance=BillDetail.objects.get(id=form.instance.id)
                                 form_instance.delete()
-                                
+                if "add_more" in request.POST:
+                    n=1 
+                    BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','amount','dated','date'),extra=n,  can_delete=True)
+                """            
+                purchasedetailformset=PurchaseDetailFormset(request.POST,queryset=qset_purchase)
+                for form in purchasedetailformset.forms:
+                    if form.has_changed():
+                        if form not in purchasedetailformset.deleted_forms:
+                            form_instance=form.save(commit=False)
+                            bill2=BillDetail.objects.get(id=int(form_instance.bill_id1))
+                            form_instance.bill=bill2
+                            form_instance.save()
+                        else:
+                            if PurchaseDetail.objects.filter(id=form.instance.id):
+                                form_instance=PurchaseDetail.objects.get(id=form.instance.id)
+                                form_instance.delete()
+                if "add_more1" in request.POST:
+                    n=1 
+                    PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True)
+                """    
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=True).filter(advance=advance_application)
+            #qset_purchase=PurchaseDetail.objects.all()
             billformset=BillFormset(queryset=qset)
+            #purchasedetailformset=PurchaseDetailFormset(queryset=qset_purchase)
             return render_to_response('finance/advance_bill.html',locals(),context_instance=RequestContext(request))
     else:
         raise Http404            
@@ -235,7 +273,7 @@ def reimb(request):
         else:
             reimb123=True
             extra1=2
-            BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated'),extra=10,)
+            BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated','date'),extra=10,)
             reimb_applications=Reimb.objects.filter(project=userprofile.project)
             bills_limit=5
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=False)
@@ -246,6 +284,7 @@ def reimb(request):
                     reimbform1.applied_date=date.today()
                     reimbform1.project=userprofile.project
                     reimbform1.save()
+                    form1_success=True
                 else:
                     reimbform_error=True
                 billformset=BillFormset(request.POST,queryset=qset)
@@ -255,12 +294,11 @@ def reimb(request):
                         form_instance.is_advance=False
                         form_instance.project=userprofile.project
                         form_instance.reimb=reimbform1
-                        form_instance.save()
-                        
-                return HttpResponseRedirect('/reimb')
+                        form_instance.save() 
                 
             else:
                 reimbform=ReimbForm()
+            reimbform=ReimbForm()
             reimbset_not_received=Reimb.objects.filter(project=userprofile.project).filter(received=False)
             reimbset_received=Reimb.objects.filter(project=userprofile.project).filter(received=True)
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=False)
@@ -278,6 +316,9 @@ def bills(request):
             bills123=True
             ExcelFormset=modelformset_factory(BillDetail,fields=('core_submitted','excel',))
             qset=BillDetail.objects.all()
+            for bill in qset:
+                    bill.excel=False
+                    bill.save()
             excelformset=ExcelFormset(queryset=qset)
             if request.method=='POST':
                 excelformset=ExcelFormset(request.POST,queryset=qset)
@@ -305,8 +346,8 @@ def bills(request):
                         i+=1
                         j=0
                     return xls_to_response(workbook,'CFI_Bills.xls')
-                qset1=BillDetail.objects.all()
-                for bill in qset1:
+                qset=BillDetail.objects.all()
+                for bill in qset:
                     bill.excel=False
                     bill.save()
             else:

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 
@@ -52,10 +53,14 @@ class BillDetail(models.Model):
     is_advance=models.BooleanField(default=False)
     project=models.ForeignKey(Project,blank=True,null=True)
     dated=models.BooleanField(default=True)
+    date=models.DateTimeField(blank=True,null=True)
     core_submitted=models.BooleanField(default=False)
     advance=models.ForeignKey(Advance,blank=True,null=True)
     reimb=models.ForeignKey(Reimb,blank=True,null=True)
     excel=models.BooleanField(blank=True,default=False)
     
-
-
+class PurchaseDetail(models.Model):
+    item_name=models.CharField(max_length=40,blank=True,null=True)
+    amount=models.FloatField(blank=True,null=True)
+    bill=models.ForeignKey(BillDetail)
+    bill_id1=models.FloatField(blank=True,null=True)
