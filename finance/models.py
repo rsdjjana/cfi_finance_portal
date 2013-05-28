@@ -39,11 +39,12 @@ class Advance(models.Model):
     
 class Reimb(models.Model):
     applied_date=models.DateTimeField(blank=True,null=True)
-    amount=models.FloatField(blank=True,null=True)
+    amount=models.FloatField(null=True)
     received=models.BooleanField(default=False,blank=True)
     received_date=models.DateTimeField(blank=True,null=True)
     project=models.ForeignKey(Project)
     submitted=models.BooleanField(default=False,blank=True)    
+    request_sent=models.BooleanField(default=False,blank=True)
 
 class BillDetail(models.Model):
     shop_name=models.CharField(max_length=40)

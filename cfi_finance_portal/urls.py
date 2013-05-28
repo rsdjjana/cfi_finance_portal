@@ -18,7 +18,10 @@ urlpatterns = patterns('',
     url(r'^advance/bill/view/(?P<advance_id>\d+)/$','finance.views.advance_bill_view',name='advance_bill_view'),
     url(r'^advance/approved/$','finance.views.advance_approved',name='advance_approved'),
     url(r'^reimb/$','finance.views.reimb',name='reimb'),
+    url(r'^reimb/request/(?P<reimb_id>\d+)/$','finance.views.reimb_request',name='reimb_request'),
     url(r'^bills/$','finance.views.bills',name='bills'),
+    url(r'^advance/bill/purchase_details/(?P<advance_id>\d+)/(?P<bill_id>\d+)/$','finance.views.bill_purchase_detail',name='bill_purchase_detail'),
+    url(r'^reimb/bill/purchase_details/(?P<reimb_id>\d+)/(?P<bill_id>\d+)/$','finance.views.bill_purchase_detail_reimb',name='bill_purchase_detail_reimb'),
     # url(r'^cfi_finance_portal/', include('cfi_finance_portal.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -19,6 +19,7 @@
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
 </tr>
 </thead>
 {% for bill in advance_bills_not_sub %}
@@ -26,12 +27,70 @@
 <td>{{bill.project.name}}</td>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#abns{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
 </tr>
 {% endfor %}
 </table>
+
+
+ {% for bill in advance_bills_not_sub %}
+<!-- Modal -->
+<div id="abns{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
+
 
 <h4>Submitted</h4>
 </br>
@@ -43,6 +102,7 @@
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
 </tr>
 
 {% for bill in advance_bills_sub %}
@@ -50,13 +110,70 @@
 <td>{{bill.project.name}}</td>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#abs{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
 </tr>
 {% endfor %}
 </table>
 </div><!-- advance-->
+
+
+ {% for bill in advance_bills_sub %}
+<!-- Modal -->
+<div id="abs{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
 
 
 <div class="tab-pane" id="reimb">
@@ -69,18 +186,78 @@
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
 </tr>
 {% for bill in reimb_bills_not_sub %}
 <tr>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#rbns{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
 </tr>
 {% endfor %}
 
 </table>
+
+
+ {% for bill in reimb_bills_not_sub %}
+<!-- Modal -->
+<div id="rbns{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
+
+
 <h4>Submitted</h4></br>
 <table class="table table-bordered">
 <tr>
@@ -89,19 +266,79 @@
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
 </tr>
 {% for bill in reimb_bills_sub %}
 <tr>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#rbs{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
 </tr>
 {% endfor %}
 
 </table>
+ {% for bill in reimb_bills_sub %}
+<!-- Modal -->
+<div id="rbs{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
+
 </div><!-- reimb -->
+
+
+
 <div class="tab-pane" id="excel">
 
 <form method="post" action=''>
@@ -115,6 +352,7 @@
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
+<th>Date</th>
 <th>Submitted?</th>
 <th>Add to Excel</th>
 </tr>
@@ -125,8 +363,9 @@
 <tr>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#dated{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
+<td>{{bill.date}}</td>
 {% for form in excelformset %}
 {% ifequal form.instance.id bill.id %}
 {% for field in form %}
@@ -139,6 +378,60 @@
 {% endif %}
 {% endfor %}
 </table>
+ {% for bill in qset %}
+<!-- Modal -->
+<div id="dated{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
 
 <h4><i>Undated</i></h4>
 <table class="table table-bordered table-condensed">
@@ -157,7 +450,7 @@
 <tr>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#undated{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
 {% for form in excelformset %}
 {% ifequal form.instance.id bill.id %}
@@ -171,6 +464,62 @@
 {% endif %}
 {% endfor %}
 </table>
+ {% for bill in qset %}
+<!-- Modal -->
+<div id="undated{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
+
+
 <hr>
 <div class="accordion">
   <div class="accordion-group">
@@ -187,6 +536,7 @@
 <th>Purchase Details</th>
 <th>Amount</th>
 <th>Dated</th>
+<th>Date</th>
 <th>Submitted?</th>
 <th>Add to Excel</th>
 </tr>
@@ -195,9 +545,10 @@
 <tr>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#s{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
 {% for form in excelformset %}
 {% ifequal form.instance.id bill.id %}
 {% for field in form %}
@@ -216,6 +567,63 @@
 <input type="submit" class="btn btn-primary " value="Create Excel Sheet" name="excel"></center>
 </form>
 </div>
+
+ {% for bill in qset %}
+<!-- Modal -->
+<div id="s{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
+
+
 </div><!-- content -->
 </div><!-- tabbable -->
 {% endif %}

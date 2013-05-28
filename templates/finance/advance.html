@@ -66,14 +66,43 @@
                 <tr>
                     <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
-                    <td>{{advance_application.split_up}}</td>
-                </tr>
+                    <td><a href="#{{advance_application.id}}" role="button" class="btn " data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
+                 </tr>
                 {% endfor %}
             </tbody>
             </table>
             {% else %}
             <h3> <center>You have no pending approvals. </center> </h3>
             {% endif %}
+            
+            
+<!-- Modal -->
+{% for advance_application in advance_applications_awaiting_approval %}
+<div id="{{advance_application.id}}" class="modal hide  " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <table class=" table table-bordered">
+  <tr>
+  <th>Applied Date</th>
+  <th>Amount</th>
+  </tr>
+  <tr>
+  <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+  <td>{{advance_application.amount}}</td>
+  </table>
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
+            
         </div><!-- awaitapproval -->
 
 
@@ -94,7 +123,7 @@
                 <tr>
                     <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
-                    <td>{{advance_application.split_up}}</td>
+                    <td><a href="#anr{{advance_application.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
                     <td>{{advance_application.approved_date|date:'d M Y'}}</td>
                     <td>{{advance_application.core_comment}}</td>
                 </tr>
@@ -104,6 +133,39 @@
             {% else %}
             <center><h3>You don't have any advances approved, or you have received amounts for all approved advances.</h3></center>
             {% endif %}
+            
+          <!-- Modal -->
+{% for advance_application in approved_not_rec %}
+<div id="anr{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <table class=" table table-bordered">
+  <tr>
+  <th>Applied Date</th>
+  <th>Amount</th>
+  <th>Approved date</th>
+ <th>Core comments</th>
+  </tr>
+  <tr>
+  <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+  <td>{{advance_application.amount}}</td>
+  <td>{{advance_application.approved_date|date:'d M Y'}}</td>
+  <td>{{advance_application.core_comment}}</td>
+  </table>
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
+              
+            
         </div><!-- approved_not_rec -->
 
         <div class="tab-pane" id="received_add_bills" >
@@ -126,7 +188,7 @@
                 <tr>
                     <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
-                    <td>{{advance_application.split_up}}</td>
+                    <td><a href="#rab{{advance_application.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
                     <td>{{advance_application.approved_date|date:'d M Y'}}</td>
                     <td>{{advance_application.receive_date|date:'d M Y'}}</td>
                     <td>{{advance_application.due_date|date:'d M Y'}}</td>
@@ -141,6 +203,46 @@
             {% else %}
             <center><h3>You have not received any new bills yet.</h3></center>
             {% endif %}
+            
+                      <!-- Modal -->
+{% for advance_application in rec_add_bills %}
+<div id="rab{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <table class=" table table-bordered">
+  <tr>
+  <th>Applied Date</th>
+  <th>Amount</th>
+  <th>Approved date</th>
+  <th>Received Date</th>
+ <th>Due Date</th>
+ <th>Core comments</th>
+ <th>Bills</th>
+  </tr>
+  <tr>
+  <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+  <td>{{advance_application.amount}}</td>
+  <td>{{advance_application.approved_date|date:'d M Y'}}</td>
+  <td>{{advance_application.receive_date|date:'d M Y'}}</td>
+  <td>{{advance_application.due_date|date:'d M Y'}}</td>
+  <td>{{advance_application.core_comment}}</td>
+  {% if advance_application.approved and advance_application.received %}
+  <td><a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">Add bills</a></td>
+  {% endif %}
+  </table>
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
+            
         </div><!-- rec_add_bills-->
 
         <div class="tab-pane" id="disapproved">
@@ -161,7 +263,7 @@
                 <tr>
                     <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
-                    <td>{{advance_application.split_up}}</td>
+                    <td><a href="#da{{advance_application.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
                     <td>{{advance_application.core_comment}}</td>
                 </tr>
                 {% endfor %}
@@ -170,6 +272,38 @@
             {% else %}
             <h3>No new unread disapprovals.</h3>
             {% endif %}
+            
+                      
+<!-- Modal -->
+{% for advance_application in disapproved_unread %}
+<div id="da{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <table class=" table table-bordered">
+  <tr>
+  <th>Applied Date</th>
+  <th>Amount</th>
+  <th>Core Comments</th>
+  </tr>
+  <tr>
+  <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+  <td>{{advance_application.amount}}</td>
+  <td>{{advance_application.core_comment}}</td>
+  </table>
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
+            
+  
             <div class="pull-right">
              <form method="POST" action=''>{% csrf_token %}<input type="submit" value="Mark All as read" class="btn btn-info" name="read"></form>
              </div>
@@ -195,7 +329,7 @@
                 <tr>
                     <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
-                    <td>{{advance_application.split_up}}</td>
+                    <td><a href="#his{{advance_application.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
                     {% if advance_application.approved %}
                     <td>Approved</td>
                     <td>{{advance_application.approved_date|date:'d M Y'}}</td>
@@ -232,12 +366,30 @@
                 {% endfor %}
             </tbody>
             </table>
+            <!-- Modal -->
+{% for advance_application in advance_applications %}
+<div id="his{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
 
             <!-- end for the user -->
         </div><!-- end of history -->
     </div>
 </div><!-- end of tabbable-->
 {% endif %}
+
 
 
 {% if userprofile.is_core %}
@@ -291,7 +443,7 @@ margin-bottom:1px;
                         {% ifequal form.instance.id app.id %}
                         <td>{{app.applied_date|date:'d M Y'}}</td>
                         <td>{{app.amount}}</td>
-                        <td>{{app.split_up}}</td>
+                        <td><a href="#paa{{app.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
                         {% for field in form %}
                         <td>{{field}}</td>
                         {% endfor %}
@@ -304,6 +456,37 @@ margin-bottom:1px;
                 </table>
                 
             </form>
+                      
+<!-- Modal -->
+{% for advance_application in pending_advance_app %}
+<div id="paa{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <table class=" table table-bordered">
+  <tr>
+  <th>Project Name</th>
+  <th>Applied Date</th>
+  <th>Amount</th>
+  </tr>
+  <tr>
+  <td>{{advance_application.project.name}}</td>
+  <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+  <td>{{advance_application.amount}}</td>
+  </table>
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
+
+            
         </div><!--request-->
     </div><!-- tabcontent-->
 </div><!-- tabbable-->

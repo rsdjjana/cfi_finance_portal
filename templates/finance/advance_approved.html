@@ -61,7 +61,7 @@
         {% ifequal form.instance.id app.id %}
         <td>{{app.applied_date|date:'d M Y'}}</td>
         <td>{{app.amount}}</td>
-        <td>{{app.split_up}}</td>
+        <td><a href="#anys{{app.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
         <td>{{app.approved_date|date:'d M Y'}}</td>
         {% for field in form %}
         {% if not forloop.last %}
@@ -85,6 +85,36 @@
     </table>
 <center><input class="btn btn-info" type='submit' value='Save' /></center>
 </form>
+                     
+<!-- Modal -->
+{% for advance_application in approved_not_submitted %}
+<div id="anys{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <table class=" table table-bordered">
+  <tr>
+  <th>Project Name</th>
+  <th>Applied Date</th>
+  <th>Amount</th>
+  </tr>
+  <tr>
+  <td>{{advance_application.project.name}}</td>
+  <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+  <td>{{advance_application.amount}}</td>
+  </table>
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
+
 
 </div><!-- notyetsub -->
 <div class="tab-pane" id="submitted">
@@ -108,7 +138,7 @@
 <td>{{advance.project.name}}</td>
 <td>{{advance.applied_date|date:'d M Y'}}</td>
 <td>{{advance.amount}}</td>
-<td>{{advance.split_up}}</td>
+<td><a href="#asub{{advance.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
 <td>{{advance.approved_date|date:'d M Y'}}</td>
 <td>{{advance.receive_date|date:'d M Y'}}</td>
 <td>{{advance.due_date|date:'d M Y'}}</td>
@@ -118,7 +148,34 @@
 {% endfor %}   
 </tbody>
 </table>
-
+<!-- Modal -->
+{% for advance_application in approved_submitted %}
+<div id="asub{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <table class=" table table-bordered">
+  <tr>
+  <th>Project Name</th>
+  <th>Applied Date</th>
+  <th>Amount</th>
+  </tr>
+  <tr>
+  <td>{{advance_application.project.name}}</td>
+  <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+  <td>{{advance_application.amount}}</td>
+  </table>
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
 
 </div><!-- submitted -->
 </div><!-- content-->

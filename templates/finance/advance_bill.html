@@ -56,10 +56,17 @@
 </tr> 
    
 </table>
+
+<div class="alert alert-info">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Note:</strong> Add the Bill details and then Save them. Only then the option to add that bill's Purchase Details will be enabled
+</div>
+
 <form method='POST' action=''>
 {% csrf_token %}
+
+
 {{billformset.management_form}}
-<!--{{purchasedetailformset.management_form}}-->
 <table class="table table-bordered table-condensed">
 <tr>
 <th>Shop Name</th>
@@ -69,6 +76,7 @@
 <th>Date</th>
 <th></th>
 <th>Delete</th>
+<th>Purchase Details</th>
 </tr>
 
 {% for bill in billformset %}
@@ -77,6 +85,11 @@
     {% for field in bill %}
     <td>{{field}}</td>
     {% endfor %}
+    {% if bill.instance.id %}
+    <td><input name="{{bill.instance.id}}" type="submit"  value="&#9755"/></td>
+    {% else %}
+    <td></td>
+    {% endif %}
     </tr>
 
 <!--
@@ -98,10 +111,50 @@
 -->
 {% endfor %}
 </table>
+<!--
+{% for bill in billformset %}
+{% if bill.instance.id %}
+<div id="{{bill.instance.id}}" class="modal hide " aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Purchase Details</h3>
+  </div>
+  <div class="modal-body">
+<table class="table table-bordered">
+<tr>
+<th>Item Name</th>
+<th>Amount</th>
+<th></th>
+<th>Delete?</th>
+</tr>
+{% for item in purchasedetailformset %}
+{% ifequal item.instance.bill.id bill.instance.id %}
+<tr>
+{% for field in item %}
+<td>{{field}}</td>
+{% endfor %}
+</tr>
+{% endifequal %}
+{% endfor %}
+</table>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <input class="btn" name="add_more1 {{bill.instance.id }}" type="submit" value="Add more" />
+    <input class="btn btn-info"  name="{{bill.instance.id}}" type="submit"  value="Save"/>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+-->
 
 <input type="submit" class="btn" name="add_more" value="Add more bills">
 <center><input type='submit' class="btn btn-info " value='Save' /></center>
+
 </form>
+
+
 
 {% endif %}<!-- end of user -->
 
@@ -111,6 +164,7 @@
 </div>
 
 <h3>{{advance_application.project.name}}</h3>
+</br>
 <table class="table table-bordered">
 <tr>
 
@@ -172,7 +226,7 @@
 <tr>
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
-<td>{{bill.purchase_detail}}</td>
+<td><a href="#{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
 <td>{{bill.amount}}</td>
 <td>{{bill.dated}}</td>
 <td>{{bill.date}}</td>
@@ -182,5 +236,62 @@
 
 </table>
 
+{% for bill in qset %}
+<!-- Modal -->
+<div id="{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
 {% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+<td>{{bill.dated}}</td>
+<td>{{bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+</table>
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
+
+
+{% endif %}
+
 {% endblock %}

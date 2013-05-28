@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block body %}
+{% if not userprofile.is_core %}
+<div class="pull-right">
+
+<a href="{% url finance.views.reimb_request reimb_id=reimb_id %}"><button class="btn">Back</button></a>
+
+</div>
+</br>
+
+<h4>Bill Detail</h4>
+<table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{current_bill.shop_name}}</td>
+<td>{{current_bill.bill_number}}</td>
+<td>{{current_bill.amount}}</td>
+<td>{{current_bill.dated}}</td>
+<td>{{current_bill.date}}</td>
+{% if userprofile.is_core %}
+<td>{{current_bill.core_submitted}}</td>
+{% endif %}
+</tr>
+
+</table>
+<h4>Purchase Details</h4>   
+<form method='POST' action=''>
+{% csrf_token %}
+{{purchasedetailformset.management_form}}
+<table class="table table-bordered">
+<tr>
+<th>Item Name</th>
+<th>Amount</th>
+<th></th>
+<th>Delete?</th>
+</tr>
+{% for item in purchasedetailformset %}
+<tr>
+{% for field in item %}
+<td>{{field}}</td>
+{% endfor %}
+</tr>
+
+{% endfor %}
+</table>
+
+<input class="btn" type="Submit" name="add_more" Value="Add more"/>
+<input  class="btn btn-info" type="Submit" name="purchase_detail" Value="Save"/>
+</form>
+
+{% endif %}
+{% endblock %}

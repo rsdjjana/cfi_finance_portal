@@ -108,14 +108,15 @@ def advance_bill(request,advance_id):
         userprofile=UserProfile.objects.get(user=request.user)
         if userprofile.is_core:
             advance_application=Advance.objects.get(id=advance_id)
+            purchase_details=PurchaseDetail.objects.all()
             qset=BillDetail.objects.filter(is_advance=True).filter(advance=advance_application)
             return render_to_response('finance/advance_bill.html',locals(),context_instance=RequestContext(request))
             
         else:
             n=1
-            #m=1
-            BillFormset=modelformset_factory(BillDetail, fields=('shop_name','bill_number','amount','dated','date'), extra=n,  can_delete=True, widgets = { })
-            #PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True)
+            m=1
+            BillFormset=modelformset_factory(BillDetail, fields=('shop_name','bill_number','amount','dated','date'), extra=n, can_delete=True)
+            #PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True,)
             advance_application=Advance.objects.get(id=advance_id)
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=True).filter(advance=advance_application)
             #qset_purchase=PurchaseDetail.objects.all()
@@ -148,13 +149,25 @@ def advance_bill(request,advance_id):
                 if "add_more" in request.POST:
                     n=1 
                     BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','amount','dated','date'),extra=n,  can_delete=True)
-                """            
+                
+                qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=True).filter(advance=advance_application)
+                bill_ids=[]
+                for bill123 in qset:
+                    bill_ids.append(int(bill123.id))
+                print bill_ids
+                
+                for bill_id in bill_ids:
+                    if str(bill_id) in request.POST:
+                        bill_id_final=bill_id
+                        return HttpResponseRedirect('/advance/bill/purchase_details/' + str(advance_id) + '/' + str(bill_id_final))
+                        
+                """                       
                 purchasedetailformset=PurchaseDetailFormset(request.POST,queryset=qset_purchase)
                 for form in purchasedetailformset.forms:
                     if form.has_changed():
                         if form not in purchasedetailformset.deleted_forms:
                             form_instance=form.save(commit=False)
-                            bill2=BillDetail.objects.get(id=int(form_instance.bill_id1))
+                            bill2=BillDetail.objects.get(id=bill_id_final)
                             form_instance.bill=bill2
                             form_instance.save()
                         else:
@@ -162,9 +175,9 @@ def advance_bill(request,advance_id):
                                 form_instance=PurchaseDetail.objects.get(id=form.instance.id)
                                 form_instance.delete()
                 if "add_more1" in request.POST:
-                    n=1 
+                    m=1 
                     PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True)
-                """    
+               """
             qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=True).filter(advance=advance_application)
             #qset_purchase=PurchaseDetail.objects.all()
             billformset=BillFormset(queryset=qset)
@@ -180,8 +193,39 @@ def advance_bill_view(request,advance_id):
         userprofile=UserProfile.objects.get(user=request.user)
         advance_application=Advance.objects.get(id=advance_id)
         qset=BillDetail.objects.filter(is_advance=True).filter(advance=advance_application)
+        purchase_details=PurchaseDetail.objects.all()
         return render_to_response('finance/advance_bill_view.html',locals(),context_instance=RequestContext(request))
-            
+   
+def bill_purchase_detail(request,advance_id,bill_id):
+    if request.user.is_authenticated():
+        userprofile=UserProfile.objects.get(user=request.user)
+        advance_application=Advance.objects.get(id=advance_id)
+        if not userprofile.is_core:
+            m=0
+            PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'), can_delete=True)
+            current_bill=BillDetail.objects.get(id=bill_id)
+            qset_purchase=PurchaseDetail.objects.filter(bill=current_bill)
+            if request.method=='POST':
+                purchasedetailformset=PurchaseDetailFormset(request.POST,queryset=qset_purchase)
+                for form in purchasedetailformset.forms:
+                    if form.has_changed():
+                        if form not in purchasedetailformset.deleted_forms:
+                            form_instance=form.save(commit=False)
+                            bill2=BillDetail.objects.get(id=bill_id)
+                            form_instance.bill=bill2
+                            form_instance.save()
+                        else:
+                            if PurchaseDetail.objects.filter(id=form.instance.id):
+                                form_instance=PurchaseDetail.objects.get(id=form.instance.id)
+                                form_instance.delete()
+                if "add_more" in request.POST:
+                    m=2 
+                    PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True)
+            qset_purchase=PurchaseDetail.objects.filter(bill=current_bill)
+            purchasedetailformset=PurchaseDetailFormset(queryset=qset_purchase)
+            return render_to_response('finance/bill_purchase_detail.html',locals(),context_instance=RequestContext(request))
+    else:
+        return Http404
             
 def advance_approved(request):
     if request.user.is_authenticated():
@@ -222,10 +266,10 @@ def reimb(request):
             reimb123=True
             ReimbFormset=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
             #ReimbFormsetNotSubmitted=modelformset_factory(Reimb,fields=('received','received_date','submitted'))
-            qsetreimb=Reimb.objects.all().order_by('submitted')
-            qsetreimb_not_yet_submitted=Reimb.objects.filter(submitted=False)
-            qsetreimb_submitted_not_received=Reimb.objects.filter(submitted=True).filter(received=False)
-            qsetreimb_submitted_received=Reimb.objects.filter(submitted=True).filter(received=True)
+            qsetreimb=Reimb.objects.filter(request_sent=True).order_by('submitted')
+            qsetreimb_not_yet_submitted=Reimb.objects.filter(submitted=False).filter(request_sent=True)
+            qsetreimb_submitted_not_received=Reimb.objects.filter(submitted=True).filter(received=False).filter(request_sent=True)
+            qsetreimb_submitted_received=Reimb.objects.filter(submitted=True).filter(received=True).filter(request_sent=True)
             
             #qsetreimbnotsub=Reimb.objects.filter(submitted=False)
             if request.method=='POST':
@@ -261,16 +305,27 @@ def reimb(request):
             reimbformset1=ReimbFormset(queryset=qsetreimb_not_yet_submitted)
             reimbformset2=ReimbFormset(queryset=qsetreimb_submitted_not_received)
             reimbformset3=ReimbFormset(queryset=qsetreimb_submitted_received)    
-            reimb_submitted=Reimb.objects.filter(submitted=True)
-            reimb_not_submitted=Reimb.objects.filter(submitted=False)
-            qsetreimb_not_yet_submitted=Reimb.objects.filter(submitted=False)
-            qsetreimb_submitted_not_received=Reimb.objects.filter(submitted=True).filter(received=False)
-            qsetreimb_submitted_received=Reimb.objects.filter(submitted=True).filter(received=True)
+            reimb_submitted=Reimb.objects.filter(submitted=True).filter(request_sent=True)
+            reimb_not_submitted=Reimb.objects.filter(submitted=False).filter(request_sent=True)
+            qsetreimb_not_yet_submitted=Reimb.objects.filter(submitted=False).filter(request_sent=True)
+            qsetreimb_submitted_not_received=Reimb.objects.filter(submitted=True).filter(received=False).filter(request_sent=True)
+            qsetreimb_submitted_received=Reimb.objects.filter(submitted=True).filter(received=True).filter(request_sent=True)
             qset=BillDetail.objects.filter(is_advance=False)
-            qsetreimb=Reimb.objects.all().order_by('submitted')
+            qsetreimb=Reimb.objects.filter(request_sent=True).order_by('submitted')
+            purchase_details=PurchaseDetail.objects.all()
             return render_to_response('finance/reimb_bill.html',locals(),context_instance=RequestContext(request))
             
         else:
+            reimb1=Reimb.objects.filter(request_sent=False)
+            if not reimb1:
+                reimb2=Reimb(project=userprofile.project)
+                reimb2.save()
+            else:
+                for reimb3 in reimb1:
+                    reimb2=reimb3
+                
+            return HttpResponseRedirect('/reimb/request/' + str(reimb2.id))
+            '''
             reimb123=True
             extra1=2
             BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','purchase_detail','amount','dated','date'),extra=10,)
@@ -295,6 +350,14 @@ def reimb(request):
                         form_instance.project=userprofile.project
                         form_instance.reimb=reimbform1
                         form_instance.save() 
+            qset=BillDetail.objects.filter(project=userprofile.project).filter(is_advance=False)
+            bill_ids=[]
+            for bill123 in qset:
+                bill_ids.append(int(bill123.id))
+            for bill_id in bill_ids:
+                if str(bill_id) in request.POST:
+                    bill_id_final=bill_id
+                    return HttpResponseRedirect('/reimb/bill/purchase_details/' + str(bill_id_final))
                 
             else:
                 reimbform=ReimbForm()
@@ -306,8 +369,109 @@ def reimb(request):
             qset1=BillDetail.objects.filter(id=0)
             billformset=BillFormset(queryset=qset1)
             return render_to_response('finance/reimb_bill.html',locals(),context_instance=RequestContext(request))        
+            '''
     else:
         raise Http404
+        
+def reimb_request(request,reimb_id):
+    if request.user.is_authenticated():
+        userprofile=UserProfile.objects.get(user=request.user)
+        if not userprofile.is_core:
+            reimb123=True
+            current_reimb=Reimb.objects.get(id=reimb_id)
+            BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','amount','dated','date'),can_delete=True)
+            qset=BillDetail.objects.filter(reimb=current_reimb)
+            if request.method=='POST':
+                billformset=BillFormset(request.POST,queryset=qset)
+                for form in billformset.forms:
+                    if form.has_changed():
+                        if form not in billformset.deleted_forms:
+                            form_instance=form.save(commit=False)
+                            form_instance.is_advance=False
+                            form_instance.project=userprofile.project
+                            form_instance.reimb=current_reimb
+                            form_instance.save()
+                        else:
+                            if BillDetail.objects.filter(id=form.instance.id):
+                                form_instance=BillDetail.objects.get(id=form.instance.id)
+                                form_instance.delete()
+                                
+                reimbform=ReimbForm(request.POST,instance=current_reimb)
+                if reimbform.is_valid():
+                    reimbform1=reimbform.save(commit=False)
+                    reimbform1.applied_date=date.today()
+                    reimbform1.project=userprofile.project
+                    reimbform1.save()
+                    if "send_request" in request.POST:
+                        current_reimb.request_sent=True
+                        current_reimb.save()
+                        print current_reimb.id
+                        form1_success=True
+                        reimb1=Reimb.objects.filter(request_sent=False)
+                        if not reimb1:
+                            reimb2=Reimb(project=userprofile.project)
+                            reimb2.save()
+                        else:
+                            for reimb3 in reimb1:
+                                reimb2=reimb3
+                        current_reimb=Reimb.objects.get(id=reimb2.id)
+                    
+                else:
+                    reimbform_error=True
+                 
+                if "add_more" in request.POST:
+                    BillFormset=modelformset_factory(BillDetail,fields=('shop_name','bill_number','amount','dated','date'),extra=2,can_delete=True) 
+                qset=BillDetail.objects.filter(reimb=current_reimb)
+                bill_ids=[]
+                for bill123 in qset:
+                    bill_ids.append(int(bill123.id))
+             
+                for bill_id in bill_ids:
+                    if str(bill_id) in request.POST:
+                        bill_id_final=bill_id
+                        return HttpResponseRedirect('/reimb/bill/purchase_details/' + str(reimb_id) + '/' + str(bill_id_final))
+            print current_reimb.id
+            reimbform=ReimbForm(instance=current_reimb)
+            billformset=BillFormset(queryset=qset)
+            reimbset_not_received=Reimb.objects.filter(project=userprofile.project).filter(received=False).filter(request_sent=True)
+            reimbset_received=Reimb.objects.filter(project=userprofile.project).filter(received=True).filter(request_sent=True)
+            qset_display=BillDetail.objects.all()
+            purchase_details=PurchaseDetail.objects.all()
+        return render_to_response('finance/reimb_bill.html',locals(),context_instance=RequestContext(request))        
+            
+    else:
+        raise Http404       
+     
+     
+def bill_purchase_detail_reimb(request,reimb_id,bill_id):
+    if request.user.is_authenticated():
+        userprofile=UserProfile.objects.get(user=request.user)
+        if not userprofile.is_core:
+            m=0
+            PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'), can_delete=True)
+            current_bill=BillDetail.objects.get(id=bill_id)
+            qset_purchase=PurchaseDetail.objects.filter(bill=current_bill)
+            if request.method=='POST':
+                purchasedetailformset=PurchaseDetailFormset(request.POST,queryset=qset_purchase)
+                for form in purchasedetailformset.forms:
+                    if form.has_changed():
+                        if form not in purchasedetailformset.deleted_forms:
+                            form_instance=form.save(commit=False)
+                            bill2=BillDetail.objects.get(id=bill_id)
+                            form_instance.bill=bill2
+                            form_instance.save()
+                        else:
+                            if PurchaseDetail.objects.filter(id=form.instance.id):
+                                form_instance=PurchaseDetail.objects.get(id=form.instance.id)
+                                form_instance.delete()
+                if "add_more" in request.POST:
+                    m=2 
+                    PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True)
+            qset_purchase=PurchaseDetail.objects.filter(bill=current_bill)
+            purchasedetailformset=PurchaseDetailFormset(queryset=qset_purchase)
+            return render_to_response('finance/bill_purchase_detail_reimb.html',locals(),context_instance=RequestContext(request))
+    else:
+        return Http404
             
 def bills(request):
     if request.user.is_authenticated():
@@ -352,6 +516,7 @@ def bills(request):
                     bill.save()
             else:
                 excelformset=ExcelFormset(queryset=qset)
+            purchase_details=PurchaseDetail.objects.all()
             advance_bills_not_sub=BillDetail.objects.filter(core_submitted=False).filter(is_advance=True)
             reimb_bills_not_sub=BillDetail.objects.filter(core_submitted=False).filter(is_advance=False)
             advance_bills_sub=BillDetail.objects.filter(core_submitted=True).filter(is_advance=True)
