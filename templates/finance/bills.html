@@ -18,7 +18,7 @@
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 </tr>
 </thead>
@@ -29,7 +29,11 @@
 <td>{{bill.bill_number}}</td>
 <td><a href="#abns{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 </tr>
 {% endfor %}
@@ -49,7 +53,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -59,7 +63,11 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
@@ -101,7 +109,7 @@
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 </tr>
 
@@ -112,7 +120,11 @@
 <td>{{bill.bill_number}}</td>
 <td><a href="#abs{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 </tr>
 {% endfor %}
@@ -133,7 +145,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -143,7 +155,11 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
@@ -185,7 +201,7 @@
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 </tr>
 {% for bill in reimb_bills_not_sub %}
@@ -194,7 +210,11 @@
 <td>{{bill.bill_number}}</td>
 <td><a href="#rbns{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 </tr>
 {% endfor %}
@@ -215,7 +235,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -225,7 +245,11 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
@@ -265,7 +289,7 @@
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 </tr>
 {% for bill in reimb_bills_sub %}
@@ -274,7 +298,11 @@
 <td>{{bill.bill_number}}</td>
 <td><a href="#rbs{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 </tr>
 {% endfor %}
@@ -293,7 +321,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -303,7 +331,11 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
@@ -345,7 +377,7 @@
 {% csrf_token %}
 {{excelformset.management_form}}
 <h4>Not Yet Submitted</h4></br>
-<h4><i>Dated</i></h4>
+<h4><span class="badge badge-success">&#10004</span> <i> Dated</i></h4></br>
 <table class="table table-bordered table-condensed">
 <tr>
 <th>Shop Name</th>
@@ -391,7 +423,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -401,7 +433,11 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
@@ -433,7 +469,7 @@
 </div>
 {% endfor %}
 
-<h4><i>Undated</i></h4>
+<h4><span class="badge badge-important">&#10008</span> <i> Undated </i></h4></br>
 <table class="table table-bordered table-condensed">
 <tr>
 <th>Shop Name</th>
@@ -487,7 +523,11 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
@@ -547,7 +587,11 @@
 <td>{{bill.bill_number}}</td>
 <td><a href="#s{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% for form in excelformset %}
 {% ifequal form.instance.id bill.id %}
@@ -581,7 +625,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -591,7 +635,11 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>

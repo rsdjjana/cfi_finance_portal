@@ -115,7 +115,7 @@
                     <th>Amount</th>
                     <th>Split Up</th>
                     <th>Approved date</th>
-                    <th>Core comments</th>
+                    <th><i class="icon-comment" > </i> Core comments</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -147,7 +147,7 @@
   <th>Applied Date</th>
   <th>Amount</th>
   <th>Approved date</th>
- <th>Core comments</th>
+ <th><i class="icon-comment" > </i> Core comments</th>
   </tr>
   <tr>
   <td>{{advance_application.applied_date|date:'d M Y'}}</td>
@@ -179,7 +179,7 @@
                     <th>Approved_date</th>
                     <th>Received Date</th>
                     <th>Due Date</th>
-                    <th>Core Comments</th>
+                    <th><i class="icon-comment" > </i> Core Comments</th>
                     <th>Bills</th>
                 </tr>
             </thead>
@@ -219,7 +219,7 @@
   <th>Approved date</th>
   <th>Received Date</th>
  <th>Due Date</th>
- <th>Core comments</th>
+ <th><i class="icon-comment" > </i> Core comments</th>
  <th>Bills</th>
   </tr>
   <tr>
@@ -255,7 +255,7 @@
                     <th>Applied Date</th>
                     <th>Amount</th>
                     <th>Split up</th>
-                    <th>Core Comments</th>
+                    <th><i class="icon-comment" > </i> Core Comments</th>
                 </tr>
             </thead>
             <tbody>
@@ -308,6 +308,8 @@
              <form method="POST" action=''>{% csrf_token %}<input type="submit" value="Mark All as read" class="btn btn-info" name="read"></form>
              </div>
         </div>
+        
+        
         <div id="history" class="tab-pane">
             <table class="table table-bordered">
             <thead>
@@ -320,35 +322,36 @@
                     <th>Recieved Status</th>
                     <th>Received Date</th>
                     <th>Due Date</th>
-                    <th>Core Comments</th>
+                    <th><i class="icon-comment" > </i> Core Comments</th>
                     <th>Bills</th>
                 </tr>
             </thead>
             <tbody>
                 {% for advance_application in advance_applications %}
+                
                 <tr>
                     <td>{{advance_application.applied_date|date:'d M Y'}}</td>
                     <td>{{advance_application.amount}}</td>
                     <td><a href="#his{{advance_application.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
                     {% if advance_application.approved %}
-                    <td>Approved</td>
+                    <td><span class="label label-success">Approved</span></td>
                     <td>{{advance_application.approved_date|date:'d M Y'}}</td>
                     {% else %}
                     {% if advance_application.disapproved %}
-                    <td>Disapproved</td>
+                    <td><span class="label label-important">Disapproved</span></td>
                     <td>None</td>
                     {% else %}
-                    <td>Awaiting</td>
+                    <td><span class="label label-warning">Awaiting</span></td>
                     <td>None</td>
                     {% endif %}
                     {% endif %}
 
                     {% if advance_application.received %}
-                    <td>Received</td>
+                    <td><span class="label label-success">Received</span></td>
                     <td>{{advance_application.receive_date|date:'d M Y'}}</td>
                     <td>{{advance_application.due_date|date:'d M Y'}}</td>
                     {% else %}
-                    <td>Not received</td>
+                    <td><span class="label label-important">Not received</span></td>
                     <td>None</td>
                     <td>None</td>
                     {% endif %}
@@ -431,7 +434,7 @@ margin-bottom:1px;
                         <th>Split Up</th>
                         <th>Approve</th>
                         <th>Disapprove</th>
-                        <th>Comments</th>
+                        <th><i class="icon-comment" > </i> Comments</th>
                         <th></th>
                     </tr>
                 </thead>

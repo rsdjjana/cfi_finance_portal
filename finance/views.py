@@ -78,10 +78,10 @@ def advance(request):
             number_approved_not_rec=len(Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=False))
             number_rec_add_bills=len(Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=True).filter(bill_submitted=False))
             number_disapproved_unread=len(Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False))
-            advance_applications_awaiting_approval=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=False)
-            approved_not_rec=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=False)
-            rec_add_bills=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=True).filter(bill_submitted=False)
-            disapproved_unread=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False)
+            advance_applications_awaiting_approval=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=False).order_by('-applied_date')
+            approved_not_rec=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=False).order_by('-approved_date')
+            rec_add_bills=Advance.objects.filter(project=userprofile.project).filter(approved=True).filter(received=True).filter(bill_submitted=False).order_by('-receive_date')
+            disapproved_unread=Advance.objects.filter(project=userprofile.project).filter(approved=False).filter(disapproved=True).filter(read=False).order_by('-applied_date')
             return render_to_response('finance/advance.html',locals(),context_instance=RequestContext(request))     
         else:
             advancereq123=True #for making the top nav bar active
@@ -107,6 +107,7 @@ def advance_bill(request,advance_id):
     if request.user.is_authenticated():
         userprofile=UserProfile.objects.get(user=request.user)
         if userprofile.is_core:
+            advanceapp123=True
             advance_application=Advance.objects.get(id=advance_id)
             purchase_details=PurchaseDetail.objects.all()
             qset=BillDetail.objects.filter(is_advance=True).filter(advance=advance_application)
@@ -115,6 +116,7 @@ def advance_bill(request,advance_id):
         else:
             n=1
             m=1
+            advance123=True
             BillFormset=modelformset_factory(BillDetail, fields=('shop_name','bill_number','amount','dated','date'), extra=n, can_delete=True)
             #PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'),extra=m, can_delete=True,)
             advance_application=Advance.objects.get(id=advance_id)
@@ -202,6 +204,7 @@ def bill_purchase_detail(request,advance_id,bill_id):
         advance_application=Advance.objects.get(id=advance_id)
         if not userprofile.is_core:
             m=0
+            advance123=True
             PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'), can_delete=True)
             current_bill=BillDetail.objects.get(id=bill_id)
             qset_purchase=PurchaseDetail.objects.filter(bill=current_bill)
@@ -448,6 +451,7 @@ def bill_purchase_detail_reimb(request,reimb_id,bill_id):
         userprofile=UserProfile.objects.get(user=request.user)
         if not userprofile.is_core:
             m=0
+            reimb123=True
             PurchaseDetailFormset=modelformset_factory(PurchaseDetail,fields=('item_name','amount'), can_delete=True)
             current_bill=BillDetail.objects.get(id=bill_id)
             qset_purchase=PurchaseDetail.objects.filter(bill=current_bill)

@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-hello
+
 {% block body %}
 <div class="pull-right">
-<a href="/advance/"><button class="btn">Back</button></a>
+<a href="/advance/"><button class="btn">Back</button></br></a>
 </div>
 
 <table class="table table-bordered">
+
 <thead>
 <tr>
 <th>Applied Date</th>
@@ -59,7 +60,7 @@ hello
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -71,7 +72,11 @@ hello
 <td>{{bill.bill_number}}</td>
 <td><a href="#{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
@@ -94,7 +99,7 @@ hello
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -104,7 +109,11 @@ hello
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>

@@ -16,7 +16,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -26,7 +26,11 @@
 <td>{{current_bill.shop_name}}</td>
 <td>{{current_bill.bill_number}}</td>
 <td>{{current_bill.amount}}</td>
-<td>{{current_bill.dated}}</td>
+{% if current_bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{current_bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{current_bill.core_submitted}}</td>

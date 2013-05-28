@@ -13,6 +13,8 @@
 <div class="pull-right">
 <a href="/advance/"><button class="btn">Back</button></a>
 </div>
+</br>
+<h4>Advance Request</h4>
 <table class="table table-bordered">
 <tr>
 <th>Applied Date</th>
@@ -23,7 +25,7 @@
 <th>Recieved Status</th>
 <th>Received Date</th>
 <th>Due Date</th>
-<th>core comments</th>
+<th><i class="icon-comment" > </i> core comments</th>
 </tr>
 
 <tr>
@@ -31,7 +33,7 @@
 <td>{{advance_application.amount}}</td>
 <td>{{advance_application.split_up}}</td>
 {% if advance_application.approved %}
-<td>Approved</td>
+<td><span class="label label-success">Approved</span></td>
 <td>{{advance_application.approved_date|date:'d M Y'}}</td>
 {% else %}
 {% if advance_application.disapproved %}
@@ -44,7 +46,7 @@
 {% endif %}
 
 {% if advance_application.received %}
-<td>Received</td>
+<td><span class="label label-success">Received</span></td>
 <td>{{advance_application.receive_date|date:'d M Y'}}</td>
 <td>{{advance_application.due_date|date:'d M Y'}}</td>
 {% else %}
@@ -176,7 +178,7 @@
 <th>Recieved Status</th>
 <th>Received Date</th>
 <th>Due Date</th>
-<th>core comments</th>
+<th><i class="icon-comment" > </i> core comments</th>
 <th>Bills submitted?</th>
 </tr>
 
@@ -218,7 +220,7 @@
 <th>Bill Number</th>
 <th>Purchase Details</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 <th>Submitted?</th>
 </tr>
@@ -228,7 +230,11 @@
 <td>{{bill.bill_number}}</td>
 <td><a href="#{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
 <td>{{bill.date}}</td>
 <td>{{bill.core_submitted}}</td>
 </tr>
@@ -249,7 +255,7 @@
 <th>Shop Name</th>
 <th>Bill Number</th>
 <th>Amount</th>
-<th>Dated</th>
+<th>Dated?</th>
 <th>Date</th>
 {% if userprofile.is_core %}
 <th>Submitted?</th>
@@ -259,7 +265,12 @@
 <td>{{bill.shop_name}}</td>
 <td>{{bill.bill_number}}</td>
 <td>{{bill.amount}}</td>
-<td>{{bill.dated}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
+
 <td>{{bill.date}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
