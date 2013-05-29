@@ -183,12 +183,12 @@
 </tr>
 
 <tr>
-<td>{{advance_application.applied_date}}</td>
+<td>{{advance_application.applied_date|date:'d M Y'}}</td>
 <td>{{advance_application.amount}}</td>
 <td>{{advance_application.split_up}}</td>
 {% if advance_application.approved %}
 <td>Approved</td>
-<td>{{advance_application.approved_date}}</td>
+<td>{{advance_application.approved_date|date:'d M Y'}}</td>
 {% else %}
 {% if advance_application.disapproved %}
 <td>Disapproved</td>
@@ -201,8 +201,8 @@
 
 {% if advance_application.received %}
 <td>Received</td>
-<td>{{advance_application.receive_date}}</td>
-<td>{{advance_application.due_date}}</td>
+<td>{{advance_application.receive_date|date:'d M Y'}}</td>
+<td>{{advance_application.due_date|date:'d M Y'}}</td>
 {% else %}
 <td>Not received</td>
 <td></td>
@@ -235,7 +235,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 <td>{{bill.core_submitted}}</td>
 </tr>
 {% endfor %}
@@ -271,7 +271,7 @@
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
 
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}

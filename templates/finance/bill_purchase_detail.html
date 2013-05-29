@@ -31,7 +31,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{current_bill.date}}</td>
+<td>{{current_bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{current_bill.core_submitted}}</td>
 {% endif %}

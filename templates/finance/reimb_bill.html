@@ -152,10 +152,10 @@
         <table class="table table-bordered">
             <div class="accordion-heading">
             <tr>
-                <td >{{reimb.applied_date}}</td>
+                <td >{{reimb.applied_date|date:'d M Y'}}</td>
                 <td>{{reimb.amount}}</td>
                 <td>{{reimb.received}}</td>
-                <td>{{reimb.received_date}}</td>
+                <td>{{reimb.received_date|date:'d M Y'}}</td>
                 <td><a class="accordion-toggle" data-toggle="collapse" href="#{{reimb.id}}"><span style="font-size:27px;">&darr;</span></a></td>
             </tr>
             </div>
@@ -186,7 +186,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-                <td>{{bill.date}}</td>
+                <td>{{bill.date|date:'d M Y'}}</td>
             </tr>
 
             {% endifequal %}
@@ -231,7 +231,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -282,10 +282,10 @@
             <table class="table table-bordered">
             <div class="accordion-heading ">
             <tr>
-                <td>{{reimb.applied_date}}</td>
+                <td>{{reimb.applied_date|date:'d M Y'}}</td>
                 <td>{{reimb.amount}}</td>
                 <td>{{reimb.received}}</td>
-                <td>{{reimb.received_date}}</td>
+                <td>{{reimb.received_date|date:'d M Y'}}</td>
                 
               <td><a class="accordion-toggle" data-toggle="collapse" href="#rec{{reimb.id}}"> <span style="font-size:27px;">&darr;</span></a></td>
             </tr>
@@ -318,7 +318,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-                <td>{{bill.date}}</td>
+                <td>{{bill.date|date:'d M Y'}}</td>
             </tr>
 
             {% endifequal %}
@@ -360,7 +360,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -479,7 +479,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-                        <td>{{bill.date}}</td>
+                        <td>{{bill.date|date:'d M Y'}}</td>
                     </tr>
 
                     {% endifequal %}
@@ -525,7 +525,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -629,7 +629,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-                        <td>{{bill.date}}</td>
+                        <td>{{bill.date|date:'d M Y'}}</td>
                     </tr>
 
                     {% endifequal %}
@@ -673,7 +673,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -777,7 +777,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-                        <td>{{bill.date}}</td>
+                        <td>{{bill.date|date:'d M Y'}}</td>
                     </tr>
 
                     {% endifequal %}
@@ -820,7 +820,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}

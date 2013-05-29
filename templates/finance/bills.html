@@ -34,7 +34,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 </tr>
 {% endfor %}
 </table>
@@ -68,7 +68,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -125,7 +125,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 </tr>
 {% endfor %}
 </table>
@@ -160,7 +160,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -215,7 +215,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 </tr>
 {% endfor %}
 
@@ -250,7 +250,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -303,7 +303,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 </tr>
 {% endfor %}
 
@@ -336,7 +336,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -397,7 +397,7 @@
 <td>{{bill.bill_number}}</td>
 <td><a href="#dated{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
 <td>{{bill.amount}}</td>
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% for form in excelformset %}
 {% ifequal form.instance.id bill.id %}
 {% for field in form %}
@@ -438,7 +438,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -528,7 +528,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
@@ -592,7 +592,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% for form in excelformset %}
 {% ifequal form.instance.id bill.id %}
 {% for field in form %}
@@ -640,7 +640,7 @@
 {% else %}
 <td><span class="badge badge-important">&#10008</span></td>
 {% endif %}
-<td>{{bill.date}}</td>
+<td>{{bill.date|date:'d M Y'}}</td>
 {% if userprofile.is_core %}
 <td>{{bill.core_submitted}}</td>
 {% endif %}
