@@ -6,29 +6,29 @@
 <ul class="nav">
 <li class="divider-vertical"></li>
 {% if home123 %}
-<li class="active"><a href='/home'><i class="icon-home icon-white" ></i> Home</a></li>
+<li class="active"><a href='/portal/finance/home'><i class="icon-home icon-white" ></i> Home</a></li>
 {% else %}
-<li><a href='/home'><i class="icon-home " ></i> Home</a></li>
+<li><a href='/portal/finance/home'><i class="icon-home " ></i> Home</a></li>
 {% endif %}
 <li class="divider-vertical"></li>
 
 
 {% if userprofile.is_core %}
 {% if advancereq123 %}
-<li class="active"><a href='/advance'><i class="icon-edit icon-white" ></i> Advance Requests</a></li>
+<li class="active"><a href='/portal/finance/advance'><i class="icon-edit icon-white" ></i> Advance Requests</a></li>
 {% else %}
-<li><a href='/advance'><i class="icon-edit" ></i> Advance Requests</a></li>
+<li><a href='/portal/finance/advance'><i class="icon-edit" ></i> Advance Requests</a></li>
 {% endif %}
 <li class="divider-vertical"></li>
 {% if advanceapp123 %}
-<li class="active"><a href='/advance/approved'><i class="icon-ok icon-white" ></i> Approved Advances</a></li>
+<li class="active"><a href='/portal/finance/advance/approved'><i class="icon-ok icon-white" ></i> Approved Advances</a></li>
 {% else %}
-<li><a href='/advance/approved'><i class="icon-ok" ></i> Approved Advances</a></li>
+<li><a href='/portal/finance/advance/approved'><i class="icon-ok" ></i> Approved Advances</a></li>
 {% endif %}
 <li class="divider-vertical"></li>
 {% else %}
 {% if advance123 %}
-<li class="active"><a href='/advance'><i class="icon-briefcase icon-white" id="li_finance_icon"></i> Advance</a></li>
+<li class="active"><a href='/portal/finance/advance'><i class="icon-briefcase icon-white" id="li_finance_icon"></i> Advance</a></li>
 {% else %}
 <li><a href='/advance'><i class="icon-briefcase" id="li_finance_icon"></i> Advance</a></li>
 {% endif %}
@@ -36,24 +36,24 @@
 {% endif %}
 
 {% if reimb123 %}
-<li class="active"><a href='/reimb'><i class="icon-tags icon-white"></i> Reimbursement</a></li>
+<li class="active"><a href='/portal/finance/reimb'><i class="icon-tags icon-white"></i> Reimbursement</a></li>
 {% else %}
-<li><a href='/reimb'><i class="icon-tags"></i> Reimbursement</a></li>
+<li><a href='/portal/finance/reimb'><i class="icon-tags"></i> Reimbursement</a></li>
 {% endif %}
 <li class="divider-vertical"></li>
 
 {% if userprofile.is_core %}
 {% if bills123 %}
-<li class="active"><a href='/bills'><i class="icon-file icon-white" ></i> Bills</a></li>
+<li class="active"><a href='/portal/finance/bills'><i class="icon-file icon-white" ></i> Bills</a></li>
 {% else %}
-<li><a href='/bills'><i class="icon-file " ></i> Bills</a></li>
+<li><a href='/portal/finance/bills'><i class="icon-file " ></i> Bills</a></li>
 {% endif %}
 
 {% endif %}
 </ul>
 <ul class="nav pull-right">
 <li class="divider-vertical"></li>
-<li ><a href="/logout"><i class="icon-off" ></i> Logout</a></li>
+<li ><a href="/portal/finance/logout"><i class="icon-off" ></i> Logout</a></li>
 </ul>
 </div>
 </div>

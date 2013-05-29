@@ -26,7 +26,7 @@ def login(request):
                 
     else:
         if request.user.is_authenticated():
-            return HttpResponseRedirect('/home/')
+            return HttpResponseRedirect('home/')
         else:
             loginform=LoginForm()
     return render_to_response('login.html',locals(),context_instance=RequestContext(request))
