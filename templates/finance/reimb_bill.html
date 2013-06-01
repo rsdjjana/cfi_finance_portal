@@ -50,7 +50,7 @@
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   <strong>Note:</strong> In order to enable the option to add Purchase Details, first add the Bill details and then Click 'Save' 
 </div>
-               <form method='POST' action='/reimb/request/{{current_reimb.id}}/'>
+               <form method='POST' action='/portal/finance/reimb/request/{{current_reimb.id}}/'>
                 {% csrf_token %}
                    {{reimbform}}
                 {{billformset.management_form}}
@@ -62,7 +62,7 @@
                       
                         <th>Amount</th>
                         <th>Dated</th>
-                        <th>Date</th>
+                        <th>Date<h6>(yyyy-mm-dd)</h6></th>
                        <th></th>
                         <th>Delete</th>
                         <th>Purchase Details</th>
