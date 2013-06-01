@@ -35,7 +35,7 @@ def login(request):
 def logout(request):
     auth.logout(request)
     loginform=LoginForm()
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/ ')
     #return render_to_response('login.html',locals(),context_instance=RequestContext(request))
     
 def home(request):
