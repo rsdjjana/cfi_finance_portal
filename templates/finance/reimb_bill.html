@@ -179,7 +179,7 @@
             <tr>
                 <td>{{bill.shop_name}}</td>
                 <td>{{bill.bill_number}}</td>
-                <td><a href="#{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
+                <td><a href="#bill{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up " ></i></a></td>
                 <td>{{bill.amount}}</td>
                 {% if bill.dated %}
 <td><span class="badge badge-success">&#10004</span></td>
@@ -205,7 +205,7 @@
 
 {% for bill in qset_display %}
 <!-- Modal -->
-<div id="{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+<div id="bill{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3>Bill Detail</h3>
@@ -287,11 +287,11 @@
                 <td>{{reimb.received}}</td>
                 <td>{{reimb.received_date|date:'d M Y'}}</td>
                 
-              <td><a class="accordion-toggle" data-toggle="collapse" href="#rec{{reimb.id}}"> <span style="font-size:27px;">&darr;</span></a></td>
+              <td><a class="accordion-toggle" data-toggle="collapse" href="#rec_{{reimb.id}}"> <span style="font-size:27px;">&darr;</span></a></td>
             </tr>
             </div>
             </table>
-        <div class="accordion-body collapse out" id="rec{{reimb.id}}">
+        <div class="accordion-body collapse out" id="rec_{{reimb.id}}">
         <div class="accordion-inner well1" >
             <table class="table table-bordered table-condensed">
         

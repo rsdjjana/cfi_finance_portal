@@ -35,7 +35,7 @@ def login(request):
 def logout(request):
     auth.logout(request)
     loginform=LoginForm()
-    return HttpResponseRedirect('/ ')
+    return HttpResponseRedirect('/portal/finance/')
     #return render_to_response('login.html',locals(),context_instance=RequestContext(request))
     
 def home(request):
@@ -161,7 +161,7 @@ def advance_bill(request,advance_id):
                 for bill_id in bill_ids:
                     if str(bill_id) in request.POST:
                         bill_id_final=bill_id
-                        return HttpResponseRedirect('/advance/bill/purchase_details/' + str(advance_id) + '/' + str(bill_id_final))
+                        return HttpResponseRedirect('/portal/finance/advance/bill/purchase_details/' + str(advance_id) + '/' + str(bill_id_final))
                         
                 """                       
                 purchasedetailformset=PurchaseDetailFormset(request.POST,queryset=qset_purchase)
