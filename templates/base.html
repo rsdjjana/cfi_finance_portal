@@ -34,11 +34,13 @@ margin-left:4%;
     {% block top_bar %}
     {% include "top_bar.html" %}
     {% endblock %}
+    {% block not_login %}
 <div>
 {% if not userprofile.is_core %}
 <h3><i class="icon-user" > </i> {{userprofile.project.name}} </h3>
 {% endif %}
 </div>
+{% endblock %}
 
         {% block body %}
 
