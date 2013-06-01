@@ -327,7 +327,7 @@ def reimb(request):
                 for reimb3 in reimb1:
                     reimb2=reimb3
                 
-            return HttpResponseRedirect('/reimb/request/' + str(reimb2.id))
+            return HttpResponseRedirect('/portal/finance/reimb/request/' + str(reimb2.id))
             '''
             reimb123=True
             extra1=2
@@ -432,7 +432,7 @@ def reimb_request(request,reimb_id):
                 for bill_id in bill_ids:
                     if str(bill_id) in request.POST:
                         bill_id_final=bill_id
-                        return HttpResponseRedirect('/reimb/bill/purchase_details/' + str(reimb_id) + '/' + str(bill_id_final))
+                        return HttpResponseRedirect('/portal/finance/reimb/bill/purchase_details/' + str(reimb_id) + '/' + str(bill_id_final))
             print current_reimb.id
             reimbform=ReimbForm(instance=current_reimb)
             billformset=BillFormset(queryset=qset)
