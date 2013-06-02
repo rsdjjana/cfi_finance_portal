@@ -36,5 +36,9 @@ margin:0;
 </div>
 </form>
 </div>
+{% if wrong_login %}
+</br>
+The Username or Password you entered is incorrect.
+{% endif %}
 </center>
 {% endblock %}

@@ -15,6 +15,7 @@ def login(request):
             username1=loginform.cleaned_data["username"]
             password1=loginform.cleaned_data["password"]
             user=auth.authenticate( username=username1, password=password1 )
+            wrong_login=False
             if user is not None:
                 if user.is_active:
                     auth.login(request,user)
@@ -22,7 +23,9 @@ def login(request):
                 else:
                     return HttpResponse('Disabled Account')
             else:
-                return HttpResponse("User is not registered")
+                wrong_login=True
+                return render_to_response('login.html',locals(),context_instance=RequestContext(request))
+                #return HttpResponse("User is not registered")
                 
     else:
         if request.user.is_authenticated():
