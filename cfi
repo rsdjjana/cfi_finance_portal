@@ -4,4 +4,14 @@
 ###4.put dated bills in a separate table
 5. calender widget for dates
 ###6. split up in Advance appears in one line 
-7.change the date format for output
+###7.change the date format for output
+8. validate formset forms
+
+a box showing the total (calculated automatically) below the "amounts" column in
+####Reimbursement tab of user (for the user to see if he has sufficient bills)
+all 4 tabs of core (to help him decide the amount of next TA on looking at total of advance request and to see how much money has been given since start of project on looking at reimbursements tab)
+###Include project name while creating excel sheet in bills tab
+Include a "check all" box on create excel tab beside "add to excel" column. It will be handy when there are many bills
+In advance requests tab, rather than disapprove column, we can have amount approved column. Often, we are unable to provide full amount. So a core can type in the amount which he is in a position to give.
+
+###9. I think it would be good to have all the projects details in the home page for core and user

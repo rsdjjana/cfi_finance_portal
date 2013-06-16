@@ -10,10 +10,11 @@
         width:80px;
     }
 </style>
-<div class="pull-right">
-<a href="/portal/finance/advance/"><button class="btn">Back</button></a>
-</div>
-</br>
+<ul class="pager">
+  <li class="next">
+    <a href="/portal/finance/advance/">&larr; Back</a>
+  </li>
+</ul>
 <h4>Advance Request</h4>
 <table class="table table-bordered">
 <tr>
@@ -161,12 +162,16 @@
 {% endif %}<!-- end of user -->
 
 {% if userprofile.is_core %}
-<div class="pull-right">
-<a href="/portal/finance/advance/approved"><button class="btn">Back</button></a>
-</div>
 
-<h3>{{advance_application.project.name}}</h3>
-</br>
+<ul class="pager">
+  <li class="next">
+    <a href="/portal/finance/advance/approved">&larr; Back</a>
+  </li>
+  
+  <li class="pull-left"><h3>{{advance_application.project.name}}</h3></li>
+</ul>
+
+
 <table class="table table-bordered">
 <tr>
 

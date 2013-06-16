@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 class Project(models.Model):
     name=models.CharField(max_length=40)
+    year=models.IntegerField(max_length=4,blank=True)
     def __unicode__(self):
         return self.name
     

@@ -45,10 +45,37 @@ def home(request):
     if request.user.is_authenticated():
         home123=True
         userprofile=UserProfile.objects.get(user=request.user)
+        if userprofile.is_core:
+            years=[2011,2012,2013]
+            projects=Project.objects.all()
         return render_to_response('finance/home.html',locals(),context_instance=RequestContext(request))
     else:
         return HttpResponse("oops wrong page!")
         
+        
+def project_detail(request,project_id):
+    if request.user.is_authenticated():
+        home123=True
+        userprofile=UserProfile.objects.get(user=request.user)
+        current_project=Project.objects.get(id=project_id)
+        current_advance=Advance.objects.filter(project=current_project)
+        current_reimb=Reimb.objects.filter(project=current_project).filter(request_sent=True)
+        qset_display=BillDetail.objects.all()
+        purchase_details=PurchaseDetail.objects.all()
+        return render_to_response('finance/project_detail.html',locals(),context_instance=RequestContext(request))
+    else:
+        return Http404   
+   
+def project_detail_advance_bill_view(request,advance_id):
+    if request.user.is_authenticated():
+        home123=True
+        userprofile=UserProfile.objects.get(user=request.user)
+        advance_application=Advance.objects.get(id=advance_id)
+        current_project=advance_application.project
+        project_id=current_project.id
+        qset=BillDetail.objects.filter(is_advance=True).filter(advance=advance_application)
+        purchase_details=PurchaseDetail.objects.all()
+        return render_to_response('finance/project_detail_advance_bill_view.html',locals(),context_instance=RequestContext(request))  
         
 def advance(request):
     if request.user.is_authenticated():
@@ -439,6 +466,9 @@ def reimb_request(request,reimb_id):
             print current_reimb.id
             reimbform=ReimbForm(instance=current_reimb)
             billformset=BillFormset(queryset=qset)
+            current_reimb_total=0
+            for qset1234 in qset:
+                current_reimb_total+=qset1234.amount
             reimbset_not_received=Reimb.objects.filter(project=userprofile.project).filter(received=False).filter(request_sent=True)
             reimbset_received=Reimb.objects.filter(project=userprofile.project).filter(received=True).filter(request_sent=True)
             qset_display=BillDetail.objects.all()
@@ -500,13 +530,16 @@ def bills(request):
                     excel_create=BillDetail.objects.filter(excel=True)
                     workbook=xlwt.Workbook()
                     worksheet=workbook.add_sheet('excelsheet',cell_overwrite_ok=True)
-                    worksheet.write(0,0,"Shop Name")
-                    worksheet.write(0,1,"Bill Number")
-                    worksheet.write(0,2,"Purchase Detail")
-                    worksheet.write(0,3,"Amount")
+                    worksheet.write(0,0,"Project Name")
+                    worksheet.write(0,1,"Shop Name")
+                    worksheet.write(0,2,"Bill Number")
+                    worksheet.write(0,3,"Purchase Detail")
+                    worksheet.write(0,4,"Amount")
                     i=1
                     j=0
                     for bill in excel_create:
+                        worksheet.write(i,j,bill.project.name)
+                        j+=1
                         worksheet.write(i,j,bill.shop_name)
                         j+=1
                         worksheet.write(i,j,bill.bill_number)

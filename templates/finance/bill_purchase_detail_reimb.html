@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
 {% if not userprofile.is_core %}
-<div class="pull-right">
 
-<a href="{% url finance.views.reimb_request reimb_id=reimb_id %}"><button class="btn">Back</button></a>
-
-</div>
-</br>
+<ul class="pager">
+  <li class="next">
+    <a href="{% url finance.views.reimb_request reimb_id=reimb_id %}">&larr; Back</a>
+  </li>
+</ul>
 
 <h4>Bill Detail</h4>
 <table class="table table-bordered">

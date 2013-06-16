@@ -37,6 +37,10 @@
 {% endif %}
 
 {% if not userprofile.is_core %}
+<script>
+var total=0;
+</script>
+</br>
 <div class="tabbable tabs-left">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#request" data-toggle="tab">Request</a></li>
@@ -50,6 +54,7 @@
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   <strong>Note:</strong> In order to enable the option to add Purchase Details, first add the Bill details and then Click 'Save' 
 </div>
+
                <form method='POST' action='/portal/finance/reimb/request/{{current_reimb.id}}/'>
                 {% csrf_token %}
                    {{reimbform}}
@@ -60,7 +65,7 @@
                         <th>Shop Name</th>
                         <th>Bill Number</th>
                       
-                        <th>Amount</th>
+                        <th>Amount<h6>Total: {{current_reimb_total}}</h6></th>
                         <th>Dated</th>
                         <th>Date<h6>(yyyy-mm-dd)</h6></th>
                        <th></th>
@@ -72,7 +77,12 @@
                    
                     <tr>
                         {% for field in bill %}
+                        
+                        {% ifequal field.label text_js %}
+                        <td><div class='reimb_amount'>{{field}}</div></td>                        
+                        {% else %}
                         <td>{{field}}</td>
+                        {% endifequal %}
                         {% endfor %}
                         {% if bill.instance.id %}
                          <td><input class="btn " name="{{bill.instance.id}}" type="submit" value="&#9755"/></td>
@@ -85,7 +95,8 @@
                     {% endfor %}
 
                 </table>
-                </br>
+       </br>
+         
 <!--
                 <div id="extra" class="collapse out">
                     <table class="table table-bordered">
@@ -140,7 +151,7 @@
             <tr>
                 <th>Applied Date</th>
                 <th>Amount</th>
-                <th>Received Status</th>
+                
                 <th>Received Date</th>
                 <th>Bill Details</th>
             </tr>
@@ -154,11 +165,7 @@
             <tr>
                 <td >{{reimb.applied_date|date:'d M Y'}}</td>
                 <td>{{reimb.amount}}</td>
-                {% if reimb.received %}
-                <td><span class="label label-success">Received</span></td>
-                {% else %}
-                <td><span class="label label-important">Not Received</span></td>
-                {% endif %}
+                
                 
                 <td>{{reimb.received_date|date:'d M Y'}}</td>
                 <td><a class="accordion-toggle" data-toggle="collapse" href="#{{reimb.id}}"><span style="font-size:27px;">&darr;</span></a></td>
@@ -275,7 +282,7 @@
             <tr>
                 <th>Applied Date</th>
                 <th>Amount</th>
-                <th>Received Status</th>
+       
                 <th>Received Date</th>
                 <th>Bill Details</th>
             </tr>
@@ -290,11 +297,6 @@
                 <td>{{reimb.applied_date|date:'d M Y'}}</td>
                 <td>{{reimb.amount}}</td>
                 
-                {% if reimb.received %}
-                <td><span class="label label-success">Received</span></td>
-                {% else %}
-                <td><span class="label label-important">Not Received</span></td>
-                {% endif %}
                 
                 <td>{{reimb.received_date|date:'d M Y'}}</td>
                 
@@ -408,6 +410,27 @@
     </div><!-- received-->
 </div><!-- content -->
 </div><!-- tabbable-->
+
+
+
+<!--
+
+<script type="text/javascript">
+var elems = document.getElementsByClassName('reimb_amount');
+
+var myLength = elems.length,
+total = 0;
+var Display = document.getElementById("Display");
+    Display.innerHTML = elems[1].value;
+for (var i = 0; i < myLength - 1 ; ++i) {
+  total += parseInt(elems[i].value);
+}
+
+document.getElementById('reimb_total').value = total;
+
+</script>
+-->
+
 {% endif %}<!-- end of user -->
 
 

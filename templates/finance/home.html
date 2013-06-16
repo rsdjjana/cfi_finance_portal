@@ -1,11 +1,52 @@
 {% extends "base.html" %}
-{% block body %}<center>
-
-    <h1>Welcome to CFI Finance Portal</h1> </center>
+{% block body %}
+<center><h2>Welcome to CFI Finance Portal</h2> </center>
 
     </br>
-    </br>
+    
 {% if not userprofile.is_core %}
     <h3>Project Details</h3>
 {% endif %}
+
+{% if userprofile.is_core %}
+<h3>Projects</h3>
+</br>
+<div class="tabbable tabs-left">
+ <ul class="nav nav-tabs">
+    {% for year in years %}
+   
+        {% if forloop.first %}
+        <li class="active"><a href="#{{year}}" data-toggle="tab">{{year}}</a></li>
+        {% else %}
+        <li><a href="#{{year}}" data-toggle="tab">{{year}}</a></li>
+        {% endif %}
+   
+    {% endfor %}
+  </ul>  
+    <div class="tab-content">
+     {% for year in years %}
+     {% if forloop.first %}
+        <div class="tab-pane active" id="{{year}}">
+     {% else %}
+         <div class="tab-pane layoutfixed" id="{{year}}">
+    {% endif %}
+    {% for project in projects %}
+    
+    <ul>
+    {% ifequal project.year year %}
+    <li><a href="{% url finance.views.project_detail project_id=project.id %}">{{project.name}}</a></li>
+    {% endifequal %}
+    </ul>
+    
+    {% endfor %}
+    
+    
+        </div>
+    {% endfor %}
+    </div>
+    
+</div>
+
+
+{% endif %}<!-- end of core -->
      {% endblock %}

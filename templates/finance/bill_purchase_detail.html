@@ -1,14 +1,20 @@
 {% extends "base.html" %}
 {% block body %}
 {% if not userprofile.is_core %}
-<div class="pull-right">
+
 {% if reimb %}
-<a href="{% url finance.views.reimb_request reimb_id=reimb_id "><button class="btn">Back</button></a>
+<ul class="pager">
+  <li class="next">
+    <a href="{% url finance.views.reimb_request reimb_id=reimb_id ">&larr; Back</a>
+  </li>
+</ul>
 {% else %}
-<a href="{% url finance.views.advance_bill advance_id=advance_application.id %}"><button class="btn">Back</button></a>
+<ul class="pager">
+  <li class="next">
+    <a href="{% url finance.views.advance_bill advance_id=advance_application.id %}">&larr; Back</a>
+  </li>
+</ul>
 {% endif %}
-</div>
-</br>
 
 <h4>Bill Detail</h4>
 <table class="table table-bordered">

@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block body %}
+<style>
+    
+    textarea{
+        height:35px;
+        margin-bottom:1px;    
+        width:auto;
+        margin-right:0px;
+        }
+        
+        .layoutfixed table{
+            table-layout:fixed;
+            
+        }
+        
+        .well1{
+            background-color:#f5f5e7;
+        }
+</style>
+<ul class="pager">
+  <li class="next">
+    <a href="/portal/finance/home/">&larr; Back</a>
+  </li>
+  <li class="pull-left"><h3>{{current_project}}</h3></li>
+</ul>
+
+
+<div class="tabbable tabs-left">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#advance" data-toggle="tab">Advance</a></li>
+        <li><a href="#reimb" data-toggle="tab">Reimbursement</a></li> 
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="advance">
+       
+{% if not current_advance %}
+No Advance Requests yet.
+{% else %} 
+
+<table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Applied Date</th>
+                    <th>Amount</th>
+                    <th>Split Up</th>
+                    <th>Approval Status</th>
+                    <th>Approved_date</th>
+                    <th>Recieved Status</th>
+                    <th>Received Date</th>
+                    <th>Due Date</th>
+                    <th><i class="icon-comment" > </i> Core Comments</th>
+                    <th>Bills submitted?</th>
+                    <th>Bills</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for advance_application in current_advance %}
+                
+                <tr>
+                    <td>{{advance_application.applied_date|date:'d M Y'}}</td>
+                    <td>{{advance_application.amount}}</td>
+                    <td><a href="#his{{advance_application.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
+                    {% if advance_application.approved %}
+                    <td><span class="label label-success">Approved</span></td>
+                    <td>{{advance_application.approved_date|date:'d M Y'}}</td>
+                    {% else %}
+                    {% if advance_application.disapproved %}
+                    <td><span class="label label-important">Disapproved</span></td>
+                    <td>None</td>
+                    {% else %}
+                    <td><span class="label label-warning">Awaiting</span></td>
+                    <td>None</td>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if advance_application.received %}
+                    <td><span class="label label-success">Received</span></td>
+                    <td>{{advance_application.receive_date|date:'d M Y'}}</td>
+                    <td>{{advance_application.due_date|date:'d M Y'}}</td>
+                    {% else %}
+                    <td><span class="label label-important">Not received</span></td>
+                    <td>None</td>
+                    <td>None</td>
+                    {% endif %}
+                    <td>{{advance_application.core_comment}}</td>
+          
+                    {% if advance_application.bill_submitted %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
+                    {% if advance_application.approved and advance_application.received %}
+                    {% if not advance_application.bill_submitted %}
+                    <td></td>
+                    {% else %}
+                    <td><a href="{% url finance.views.project_detail_advance_bill_view advance_id=advance_application.id %}">View bills</a></td>
+                    {% endif %}
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            <!-- Modal -->
+{% for advance_application in current_advance %}
+<div id="his{{advance_application.id}}" class="modal hide " tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advance</h3>
+  </div>
+  <div class="modal-body">
+  <h4>Split Up</h4>
+    {{advance_application.split_up|linebreaks}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ 
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+</div><!-- advance -->
+            
+<div class="tab-pane layoutfixed " id="reimb">
+
+{% if not current_reimb %}
+<center>No Reimbursement Requests yet.</center>
+{% else %}
+    <table class="table table-bordered">
+            <tr>
+                <th>Applied Date</th>
+                <th>Amount</th>
+                <th>Received Status</th>
+                <th>Received Date</th>
+                <th>Submitted?</th>
+                <th>Bill Details</th>
+            </tr>
+    </table>
+        <div class="accordion">
+        <div class="accordion-group">
+       
+            {% for reimb in current_reimb %}
+            <table class="table table-bordered">
+            <div class="accordion-heading ">
+            <tr>
+                <td>{{reimb.applied_date|date:'d M Y'}}</td>
+                <td>{{reimb.amount}}</td>
+                
+                {% if reimb.received %}
+                <td><span class="label label-success">Received</span></td>
+                {% else %}
+                <td><span class="label label-important">Not Received</span></td>
+                {% endif %}
+                
+                <td>{{reimb.received_date|date:'d M Y'}}</td>
+                {% if reimb.submitted %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
+              <td><a class="accordion-toggle" data-toggle="collapse" href="#rec_{{reimb.id}}"> <span style="font-size:27px;">&darr;</span></a></td>
+            </tr>
+            </div>
+            </table>
+        <div class="accordion-body collapse out" id="rec_{{reimb.id}}">
+        <div class="accordion-inner well1" >
+            <table class="table table-bordered table-condensed">
+        
+            <tr><td>Bill Details</td></tr>
+            <tr>
+
+                <th>Shop Name</th>
+                <th>Bill Number</th>
+                <th>Purchase Details</th>
+                <th>Amount</th>
+                <th>Dated?</th>
+                <th>Date</th>
+
+            </tr>
+            {% for bill in qset_display %}
+            {% ifequal bill.reimb reimb %}
+            <tr>
+                <td>{{bill.shop_name}}</td>
+                <td>{{bill.bill_number}}</td>
+            <td><a href="#rec{{bill.id}}" role="button" class="btn" data-toggle="modal"><i class="icon-hand-up" ></i></a></td>
+                <td>{{bill.amount}}</td>
+                {% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
+                <td>{{bill.date|date:'d M Y'}}</td>
+            </tr>
+
+            {% endifequal %}
+            {% endfor%}
+            </table>
+            </div>
+            </div>
+            {% endfor %}
+            </div><!-- accordion group-->
+        </div><!-- accordion-->
+        {% for bill in qset_display %}
+<!-- Modal -->
+<div id="rec{{bill.id}}" class="modal hide " tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Bill Detail</h3>
+  </div>
+  <div class="modal-body">
+  <table class="table table-bordered">
+<tr>
+<th>Shop Name</th>
+<th>Bill Number</th>
+<th>Amount</th>
+<th>Dated?</th>
+<th>Date</th>
+{% if userprofile.is_core %}
+<th>Submitted?</th>
+{% endif %}
+</tr>
+<tr>
+<td>{{bill.shop_name}}</td>
+<td>{{bill.bill_number}}</td>
+<td>{{bill.amount}}</td>
+{% if bill.dated %}
+<td><span class="badge badge-success">&#10004</span></td>
+{% else %}
+<td><span class="badge badge-important">&#10008</span></td>
+{% endif %}
+<td>{{bill.date|date:'d M Y'}}</td>
+{% if userprofile.is_core %}
+<td>{{bill.core_submitted}}</td>
+{% endif %}
+</tr>
+<table class="table table-bordered">
+
+    <h4>Purchase Details</h4>
+        <table class="table table-bordered">
+        <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        </tr>
+    {% for purchase_detail in purchase_details %}
+    {% ifequal purchase_detail.bill bill %}
+        
+        <tr>
+        <td>{{purchase_detail.item_name}}</td>
+        <td>{{purchase_detail.amount}}</td>
+        </tr>
+        
+    {% endifequal %}
+    {% endfor %}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+{% endfor %}
+
+{% endif %}
+</div><!-- reimb-->
+</div>
+</div>
+
+
+
+{% endblock %}
+
